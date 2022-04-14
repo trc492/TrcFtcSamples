@@ -56,6 +56,7 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
     private static final double ELEVATOR_OFFSET                 = 0.0;
     private static final double ELEVATOR_CAL_POWER              = 0.3;
     private static final double ELEVATOR_STALL_MIN_POWER        = 0.5;
+    private static final double ELEVATOR_STALL_TOLERANCE        = 0.0;
     private static final double ELEVATOR_STALL_TIMEOUT          = 0.5;
     private static final double ELEVATOR_RESET_TIMEOUT          = 0.5;
     private static final boolean ELEVATOR_INVERTED              = false;
@@ -81,15 +82,18 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
     @Override
     public void initRobot()
     {
+        final FtcMotorActuator.MotorParams motorParams = new FtcMotorActuator.MotorParams(
+            ELEVATOR_INVERTED,
+            ELEVATOR_HAS_LOWER_LIMIT_SWITCH, ELEVATOR_LOWER_LIMIT_SWITCH_INVERTED,
+            ELEVATOR_HAS_UPPER_LIMIT_SWITCH, ELEVATOR_UPPER_LIMIT_SWITCH_INVERTED);
         final TrcPidActuator.Parameters elevatorParams = new TrcPidActuator.Parameters()
                 .setPosRange(ELEVATOR_MIN_HEIGHT, ELEVATOR_MAX_HEIGHT)
                 .setScaleOffset(ELEVATOR_INCHES_PER_COUNT, ELEVATOR_OFFSET)
                 .setPidParams(new TrcPidController.PidParameters(
                     ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_TOLERANCE))
-                .setMotorParams(
-                    ELEVATOR_INVERTED, ELEVATOR_HAS_LOWER_LIMIT_SWITCH, ELEVATOR_LOWER_LIMIT_SWITCH_INVERTED,
-                    ELEVATOR_HAS_UPPER_LIMIT_SWITCH, ELEVATOR_UPPER_LIMIT_SWITCH_INVERTED, ELEVATOR_CAL_POWER)
-                .setStallProtectionParams(ELEVATOR_STALL_MIN_POWER, ELEVATOR_STALL_TIMEOUT, ELEVATOR_RESET_TIMEOUT);
+                .setZeroCalibratePower(ELEVATOR_CAL_POWER)
+                .setStallProtectionParams(
+                    ELEVATOR_STALL_MIN_POWER, ELEVATOR_STALL_TOLERANCE, ELEVATOR_STALL_TIMEOUT, ELEVATOR_RESET_TIMEOUT);
 
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -101,7 +105,7 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
         //
         // Elevator subsystem.
         //
-        elevator = new FtcMotorActuator("elevator", elevatorParams).getPidActuator();
+        elevator = new FtcMotorActuator("elevator", motorParams, elevatorParams).getPidActuator();
         elevator.zeroCalibrate();
     }   //initRobot
 

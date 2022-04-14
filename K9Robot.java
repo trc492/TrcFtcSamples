@@ -30,7 +30,6 @@ import TrcCommonLib.trclib.TrcEnhancedServo;
 import TrcCommonLib.trclib.TrcGyro;
 import TrcCommonLib.trclib.TrcPidController;
 import TrcCommonLib.trclib.TrcPidDrive;
-import TrcCommonLib.trclib.TrcSensorTrigger;
 import TrcCommonLib.trclib.TrcSimpleDriveBase;
 import TrcFtcLib.ftclib.FtcBNO055Imu;
 import TrcFtcLib.ftclib.FtcDashboard;
@@ -183,8 +182,6 @@ public class K9Robot
         //
         motorLeft = new FtcDcMotor("left_wheel");
         motorRight = new FtcDcMotor("right_wheel");
-        motorLeft.setOdometryEnabled(true);
-        motorRight.setOdometryEnabled(true);
         motorLeft.setInverted(true);
         motorRight.setInverted(false);
 
