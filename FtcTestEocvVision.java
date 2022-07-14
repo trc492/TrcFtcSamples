@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import TrcCommonLib.trclib.TrcHomographyMapper;
 import TrcCommonLib.trclib.TrcOpenCVDetector;
@@ -95,7 +96,7 @@ public class FtcTestEocvVision extends FtcOpMode
             OpenCvCameraFactory.getInstance().createWebcam(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), cameraViewId);
         eocvVision = new EocvVision(
-            "EocvVision", 320, 240, cameraRect, worldRect, webcam, null);
+            "EocvVision", 320, 240, cameraRect, worldRect, webcam, OpenCvCameraRotation.UPRIGHT, true, null);
     }   //initRobot
 
     //
