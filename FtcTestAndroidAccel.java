@@ -98,7 +98,7 @@ public class FtcTestAndroidAccel extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 100;
         dashboard.displayPrintf(1, LABEL_WIDTH, "Raw: ", "x=%.2f,y=%.2f,z=%.2f",
@@ -117,6 +117,6 @@ public class FtcTestAndroidAccel extends FtcOpMode
                                 accel.getXDistance().value,
                                 accel.getYDistance().value,
                                 accel.getZDistance().value);
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestAndroidAccel

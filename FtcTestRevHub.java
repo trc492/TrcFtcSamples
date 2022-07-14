@@ -105,7 +105,7 @@ public class FtcTestRevHub extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         //
         // Test I2C IMU.
@@ -174,7 +174,7 @@ public class FtcTestRevHub extends FtcOpMode
         }
 
         telemetry.update();
-    }   //runPeriodic
+    }   //slowPeriodic
 
     private void buttonEvent(TrcGameController gameCtrl, int button, boolean pressed)
     {

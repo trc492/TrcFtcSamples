@@ -67,7 +67,7 @@ public class FtcAutoK9LineFollow extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void runContinuous(double elapsedTime)
+    public void fastPeriodic(double elapsedTime)
     {
         double left;
         double right;
@@ -97,6 +97,6 @@ public class FtcAutoK9LineFollow extends FtcOpMode
         robot.dashboard.displayPrintf(2, "light: %.2f", lightValue);
         robot.dashboard.displayPrintf(3, "left power: %.2f", left);
         robot.dashboard.displayPrintf(4, "right power: %.2f", right);
-    }   //runContinuous
+    }   //fastPeriodic
 
 }   //class FtcAutoK9LineFollow

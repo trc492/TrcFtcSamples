@@ -86,7 +86,7 @@ public class FtcTeleOpMecanumDrive extends FtcOpMode implements TrcGameControlle
     }   //startMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         //
         // DriveBase subsystem.
@@ -100,7 +100,7 @@ public class FtcTeleOpMecanumDrive extends FtcOpMode implements TrcGameControlle
         dashboard.displayPrintf(2, "x: %.2f", x);
         dashboard.displayPrintf(3, "y: %.2f", y);
         dashboard.displayPrintf(4, "rotation: %.2f", rotation);
-    }   //runPeriodic
+    }   //slowPeriodic
 
     //
     // Implements TrcGameController.ButtonHandler interface.

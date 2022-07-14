@@ -77,7 +77,7 @@ public class FtcTestI2cColorSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 200;
         dashboard.displayPrintf(1, LABEL_WIDTH, "FirmwareRev: ", "%x", i2cColorSensor.getFirmwareRevision());
@@ -99,6 +99,6 @@ public class FtcTestI2cColorSensor extends FtcOpMode
                                 colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue(),
                                 colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue());
         dashboard.displayPrintf(10, LABEL_WIDTH, "Hue: ", "%08x", colorSensor.argb());
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestI2cColorSensor

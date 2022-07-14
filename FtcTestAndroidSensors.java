@@ -208,7 +208,7 @@ public class FtcTestAndroidSensors extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 160;
         if (accel != null)
@@ -315,6 +315,6 @@ public class FtcTestAndroidSensors extends FtcOpMode
         {
             dashboard.displayPrintf(9, LABEL_WIDTH, "Light: ", "none.");
         }
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestAndroidSensors

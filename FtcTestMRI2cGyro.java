@@ -71,7 +71,7 @@ public class FtcTestMRI2cGyro extends FtcOpMode
     }   //startMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 200;
         dashboard.displayPrintf(1, LABEL_WIDTH, "FirmwareRev: ", "%x", gyro.getFirmwareRevision());
@@ -90,6 +90,6 @@ public class FtcTestMRI2cGyro extends FtcOpMode
             dashboard.displayPrintf(7, LABEL_WIDTH, "ZOffset: ", "%.0f", gyro.getZOffset().value);
             dashboard.displayPrintf(8, LABEL_WIDTH, "ZScaling: ", "%.0f", gyro.getZScaling().value);
         }
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestMRI2cGyro

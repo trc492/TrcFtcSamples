@@ -74,7 +74,7 @@ public class FtcTestMRRangeSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 200;
         dashboard.displayPrintf(1, LABEL_WIDTH, "Range: ", "%.3f in", rangeSensor.getDistance(DistanceUnit.INCH));
@@ -95,6 +95,6 @@ public class FtcTestMRRangeSensor extends FtcOpMode
         {
             dashboard.displayPrintf(6, LABEL_WIDTH, "Optical distance: ", "%.0f", opticalDistance.value);
         }
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestMRRangeSensor

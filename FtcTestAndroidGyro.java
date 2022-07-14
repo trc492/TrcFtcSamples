@@ -82,7 +82,7 @@ public class FtcTestAndroidGyro extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 100;
 
@@ -98,6 +98,6 @@ public class FtcTestAndroidGyro extends FtcOpMode
                                 gyro.getXHeading().value,
                                 gyro.getYHeading().value,
                                 gyro.getZHeading().value);
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestAndroidGyro

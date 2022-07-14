@@ -69,7 +69,7 @@ public class FtcTestAdaFruitColorSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 100;
         TrcSensor.SensorData<Integer> data;
@@ -104,6 +104,6 @@ public class FtcTestAdaFruitColorSensor extends FtcOpMode
         {
             dashboard.displayPrintf(6, LABEL_WIDTH, "Blue: ", "%d", data.value);
         }
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestAdaFruitColorSensor

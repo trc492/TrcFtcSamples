@@ -72,7 +72,7 @@ public class FtcTeleOpK9ArcadeDrive extends FtcOpMode implements TrcGameControll
     }   //stopMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         //
         // DriveBase subsystem.
@@ -86,7 +86,7 @@ public class FtcTeleOpK9ArcadeDrive extends FtcOpMode implements TrcGameControll
         robot.dashboard.displayPrintf(3, "claw: %.2f", robot.clawServo.getPosition());
         robot.dashboard.displayPrintf(4, "throttle: %.2f", throttle);
         robot.dashboard.displayPrintf(5, "direction: %.2f", direction);
-    }   //runPeriodic
+    }   //slowPeriodic
 
     //
     // Implements TrcGameController.ButtonHandler interface.

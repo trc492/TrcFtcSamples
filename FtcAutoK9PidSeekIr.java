@@ -89,7 +89,7 @@ public class FtcAutoK9PidSeekIr extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void runContinuous(double elapsedTime)
+    public void fastPeriodic(double elapsedTime)
     {
         State state = sm.checkReadyAndGetState();
 
@@ -123,6 +123,6 @@ public class FtcAutoK9PidSeekIr extends FtcOpMode
             robot.irDrivePidCtrl.displayPidInfo(8);
             robot.irTurnPidCtrl.displayPidInfo(10);
         }
-    }   //runContinuous
+    }   //fastPeriodic
 
 }   //class FtcAutoK9PidSeekIr

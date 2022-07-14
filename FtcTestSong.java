@@ -170,7 +170,7 @@ public class FtcTestSong extends FtcOpMode
     }   //startMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         State state = sm.checkReadyAndGetState();
 
@@ -202,6 +202,6 @@ public class FtcTestSong extends FtcOpMode
                     break;
             }
         }
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestSong

@@ -259,7 +259,7 @@ public class FtcTestVuforia extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 120;
 
@@ -301,6 +301,6 @@ public class FtcTestVuforia extends FtcOpMode
             dashboard.displayPrintf(5, LABEL_WIDTH, "RobotLoc = ",
                     lastRobotLocation.formatAsTransform());
         }
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestVuforia

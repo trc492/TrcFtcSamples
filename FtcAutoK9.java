@@ -158,13 +158,13 @@ public class FtcAutoK9 extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void runContinuous(double elapsedTime)
+    public void fastPeriodic(double elapsedTime)
     {
         if (autoCommand != null)
         {
             autoCommand.cmdPeriodic(elapsedTime);
         }
-    }   //runContinuous
+    }   //fastPeriodic
 
     private void doMenus()
     {

@@ -69,7 +69,7 @@ public class FtcTestZXDistanceSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         final int LABEL_WIDTH = 200;
         TrcSensor.SensorData<Double> data;

@@ -69,7 +69,7 @@ public class FtcTestRevColorSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void runPeriodic(double elapsedTime)
+    public void slowPeriodic(double elapsedTime)
     {
         dashboard.displayPrintf(1, "argb=%d/%d/%d/%d",
                 colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue());
@@ -83,6 +83,6 @@ public class FtcTestRevColorSensor extends FtcOpMode
         dashboard.displayPrintf(4, "Normalized ColorInt=%d/%d/%d/%d",
                 Color.alpha(normalizedColorInt), Color.red(normalizedColorInt), Color.green(normalizedColorInt),
                 Color.blue(normalizedColorInt));
-    }   //runPeriodic
+    }   //slowPeriodic
 
 }   //class FtcTestRevColorSensor
