@@ -106,11 +106,13 @@ public class FtcTestEocvVision extends FtcOpMode
     public void startMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
     {
         dashboard.clearDisplay();
+        eocvVision.setEnabled(true);
     }   //startMode
 
     @Override
     public void stopMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
     {
+        eocvVision.setEnabled(false);
     }   //stopMode
 
     @Override
