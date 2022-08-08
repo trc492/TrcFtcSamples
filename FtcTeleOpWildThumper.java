@@ -35,7 +35,6 @@ import TrcCommonLib.trclib.TrcRobot;
 import TrcCommonLib.trclib.TrcSimpleDriveBase;
 import TrcCommonLib.trclib.TrcSong;
 import TrcCommonLib.trclib.TrcSongPlayer;
-import TrcFtcLib.ftclib.FtcAnalogOutTone;
 import TrcFtcLib.ftclib.FtcAndroidTone;
 import TrcFtcLib.ftclib.FtcDashboard;
 import TrcFtcLib.ftclib.FtcDcMotor;
@@ -76,12 +75,10 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
     // Sound devices.
     //
     private FtcAndroidTone androidTone = null;
-    private FtcAnalogOutTone analogTone = null;
     private TrcSong[] collection = null;
     private int songIndex = -1;
     private TrcSongPlayer songPlayer = null;
     private final TrcBooleanState envelopeToggle = new TrcBooleanState("EnvelopeToggle", true);
-    private final TrcBooleanState analogToneToggle = new TrcBooleanState("AnalogToneToggle", false);
     //
     // Drive Base.
     //
@@ -113,7 +110,6 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
         androidTone = new FtcAndroidTone("AndroidTone");
         androidTone.setSoundEnvelope(ATTACK, DECAY, SUSTAIN, RELEASE);
         androidTone.setSoundEnvelopeEnabled(envelopeToggle.getState());
-        analogTone = new FtcAnalogOutTone("AnalogTone");
         int songResourceId = hardwareMap.appContext.getResources().getIdentifier(
             "songcollection", "raw", hardwareMap.appContext.getPackageName());
         InputStream songStream = activity.getResources().openRawResource(songResourceId);
@@ -192,7 +188,7 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
                 // This is the first time we start the song. So create the song player and associate it with the
                 // appropriate tone generator.
                 //
-                songPlayer = new TrcSongPlayer("SongPlayer", analogToneToggle.getState() ? analogTone : androidTone);
+                songPlayer = new TrcSongPlayer("SongPlayer", androidTone);
             }
             songPlayer.playSong(collection[index], BAR_DURATION, true, false);
             songIndex = index;
@@ -240,7 +236,6 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
         dashboard.displayPrintf(1, "Power(L/R) = %.2f/%.2f", left, right);
         dashboard.displayPrintf(2, "GyroHeading = %.2f", gyro.getZHeading().value);
         dashboard.displayPrintf(3, "SoundEnvelope = %s", envelopeToggle.getState()? "ON": "OFF");
-        dashboard.displayPrintf(4, "ToneDevice = %s", analogToneToggle.getState()? "AnalogOut": "Android");
     }   //slowPeriodic
 
     //
@@ -255,27 +250,6 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
             switch (button)
             {
                 case FtcGamepad.GAMEPAD_Y:
-                    //
-                    // Press this button to change the tone device between the Android phone or the Analog Output Port.
-                    //
-                    if (pressed)
-                    {
-                        analogToneToggle.toggleState();
-                        //
-                        // Since we changed the tone device, we need to destroy the old song player and
-                        // create a new one with a different tone device.
-                        //
-                        int lastSongIndex = songIndex;
-                        if (songPlayer != null)
-                        {
-                            songPlayer.stop();
-                            songPlayer = null;
-                        }
-                        if (lastSongIndex != -1)
-                        {
-                            startSong(lastSongIndex, true);
-                        }
-                    }
                     break;
 
                 case FtcGamepad.GAMEPAD_X:
@@ -294,25 +268,11 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
                     //
                     if (pressed)
                     {
-                        if (analogToneToggle.getState())
-                        {
-                            analogTone.playTone(LOW_BEEP, BEEP_DURATION);
-                        }
-                        else
-                        {
-                            androidTone.playTone(LOW_BEEP, BEEP_DURATION);
-                        }
+                        androidTone.playTone(LOW_BEEP, BEEP_DURATION);
                     }
                     else
                     {
-                        if (analogToneToggle.getState())
-                        {
-                            analogTone.playTone(HIGH_BEEP, BEEP_DURATION);
-                        }
-                        else
-                        {
-                            androidTone.playTone(HIGH_BEEP, BEEP_DURATION);
-                        }
+                        androidTone.playTone(HIGH_BEEP, BEEP_DURATION);
                     }
                     break;
 
