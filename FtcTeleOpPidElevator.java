@@ -74,6 +74,7 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
     // Elevator.
     //
     private TrcPidActuator elevator;
+    private boolean elevatorManualOverride = false;
 
     //
     // Implements FtcOpMode abstract methods.
@@ -126,7 +127,14 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
         // Elevator subsystem.
         //
         double elevatorPower = gamepad.getRightStickY(true);
-        elevator.setPower(elevatorPower);
+        if (elevatorManualOverride)
+        {
+            elevator.setPower(elevatorPower);
+        }
+        else
+        {
+            elevator.setPidPower(elevatorPower);
+        }
         dashboard.displayPrintf(
                 1, "Elevator:power=%.2f,height=%.2f,lowerLimit=%s,upperLimit=%s",
                 elevatorPower, elevator.getPosition(), elevator.isLowerLimitSwitchActive(),
@@ -147,7 +155,7 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
                 case FtcGamepad.GAMEPAD_RBUMPER:
                     // Press and hold this button to enable manual override.
                     // Release this button to disable manual override.
-                    elevator.setManualOverride(pressed);
+                    elevatorManualOverride = pressed;
                     break;
 
                 case FtcGamepad.GAMEPAD_BACK:
