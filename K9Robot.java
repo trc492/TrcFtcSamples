@@ -26,7 +26,6 @@ import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 
 import TrcCommonLib.trclib.TrcAnalogSensorTrigger;
 import TrcCommonLib.trclib.TrcDbgTrace;
-import TrcCommonLib.trclib.TrcEnhancedServo;
 import TrcCommonLib.trclib.TrcGyro;
 import TrcCommonLib.trclib.TrcPidController;
 import TrcCommonLib.trclib.TrcPidDrive;
@@ -154,10 +153,8 @@ public class K9Robot
     //
     // Other subsystems.
     //
-    public FtcServo armServo;
-    public TrcEnhancedServo arm;
-    public FtcServo clawServo;
-    public TrcEnhancedServo claw;
+    public FtcServo arm;
+    public FtcServo claw;
 
     public K9Robot()
     {
@@ -230,16 +227,14 @@ public class K9Robot
         //
         // Arm subsystem.
         //
-        armServo = new FtcServo("servo_1");
-        armServo.setLogicalRange(ARM_RANGE_MIN, ARM_RANGE_MAX);
-        arm = new TrcEnhancedServo("arm", armServo);
+        arm = new FtcServo("servo_1");
+        arm.setLogicalRange(ARM_RANGE_MIN, ARM_RANGE_MAX);
         arm.setPosition(ARM_RANGE_MIN);
         //
         // Claw subsystem.
         //
-        clawServo = new FtcServo("servo_6");
-        clawServo.setLogicalRange(CLAW_RANGE_MIN, CLAW_RANGE_MAX);
-        claw = new TrcEnhancedServo("claw", clawServo);
+        claw = new FtcServo("servo_6");
+        claw.setLogicalRange(CLAW_RANGE_MIN, CLAW_RANGE_MAX);
         claw.setPosition(CLAW_RANGE_MIN);
     }   //K9Robot
 
