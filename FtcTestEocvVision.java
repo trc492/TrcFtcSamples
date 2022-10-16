@@ -32,8 +32,9 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import TrcCommonLib.trclib.TrcHomographyMapper;
-import TrcCommonLib.trclib.TrcOpenCVDetector;
+import TrcCommonLib.trclib.TrcOpenCvDetector;
 import TrcCommonLib.trclib.TrcRobot;
+import TrcCommonLib.trclib.TrcVisionTargetInfo;
 import TrcFtcLib.ftclib.FtcDashboard;
 import TrcFtcLib.ftclib.FtcOpMode;
 
@@ -44,32 +45,36 @@ import TrcFtcLib.ftclib.FtcOpMode;
 @Disabled
 public class FtcTestEocvVision extends FtcOpMode
 {
-    final double HOMOGRAPHY_CAMERA_TOPLEFT_X        = 0.0;
-    final double HOMOGRAPHY_CAMERA_TOPLEFT_Y        = 0.0;
-    final double HOMOGRAPHY_CAMERA_TOPRIGHT_X       = 639.0;
-    final double HOMOGRAPHY_CAMERA_TOPRIGHT_Y       = 0.0;
-    final double HOMOGRAPHY_CAMERA_BOTTOMLEFT_X     = 0.0;
-    final double HOMOGRAPHY_CAMERA_BOTTOMLEFT_Y     = 479.0;
-    final double HOMOGRAPHY_CAMERA_BOTTOMRIGHT_X    = 639.0;
-    final double HOMOGRAPHY_CAMERA_BOTTOMRIGHT_Y    = 479.0;
+    private static final double CAMERA_HEIGHT_OFFSET            = 16.0;     //Camera offset from floor in inches
+    private static final int CAMERA_IMAGE_WIDTH                 = 640;
+    private static final int CAMERA_IMAGE_HEIGHT                = 480;
+
+    private static final double HOMOGRAPHY_CAMERA_TOPLEFT_X     = 0.0;
+    private static final double HOMOGRAPHY_CAMERA_TOPLEFT_Y     = 0.0;
+    private static final double HOMOGRAPHY_CAMERA_TOPRIGHT_X    = 639.0;
+    private static final double HOMOGRAPHY_CAMERA_TOPRIGHT_Y    = 0.0;
+    private static final double HOMOGRAPHY_CAMERA_BOTTOMLEFT_X  = 0.0;
+    private static final double HOMOGRAPHY_CAMERA_BOTTOMLEFT_Y  = 479.0;
+    private static final double HOMOGRAPHY_CAMERA_BOTTOMRIGHT_X = 639.0;
+    private static final double HOMOGRAPHY_CAMERA_BOTTOMRIGHT_Y = 479.0;
 
     // These should be in real-world robot coordinates. Needs calibration after camera is actually mounted in position.
     // Measurement unit: inches
-    final double HOMOGRAPHY_WORLD_TOPLEFT_X         = -22.25;
-    final double HOMOGRAPHY_WORLD_TOPLEFT_Y         = 60.0;
-    final double HOMOGRAPHY_WORLD_TOPRIGHT_X        = 23.0;
-    final double HOMOGRAPHY_WORLD_TOPRIGHT_Y        = 60.0;
-    final double HOMOGRAPHY_WORLD_BOTTOMLEFT_X      = -8.75;
-    final double HOMOGRAPHY_WORLD_BOTTOMLEFT_Y      = 16.0;
-    final double HOMOGRAPHY_WORLD_BOTTOMRIGHT_X     = 7.5;
-    final double HOMOGRAPHY_WORLD_BOTTOMRIGHT_Y     = 16.0;
+    private static final double HOMOGRAPHY_WORLD_TOPLEFT_X      = -22.25;
+    private static final double HOMOGRAPHY_WORLD_TOPLEFT_Y      = 60.0;
+    private static final double HOMOGRAPHY_WORLD_TOPRIGHT_X     = 23.0;
+    private static final double HOMOGRAPHY_WORLD_TOPRIGHT_Y     = 60.0;
+    private static final double HOMOGRAPHY_WORLD_BOTTOMLEFT_X   = -8.75;
+    private static final double HOMOGRAPHY_WORLD_BOTTOMLEFT_Y   = 16.0;
+    private static final double HOMOGRAPHY_WORLD_BOTTOMRIGHT_X  = 7.5;
+    private static final double HOMOGRAPHY_WORLD_BOTTOMRIGHT_Y  = 16.0;
 
-    final TrcHomographyMapper.Rectangle cameraRect = new TrcHomographyMapper.Rectangle(
+    private static final TrcHomographyMapper.Rectangle cameraRect = new TrcHomographyMapper.Rectangle(
         HOMOGRAPHY_CAMERA_TOPLEFT_X, HOMOGRAPHY_CAMERA_TOPLEFT_Y,
         HOMOGRAPHY_CAMERA_TOPRIGHT_X, HOMOGRAPHY_CAMERA_TOPRIGHT_Y,
         HOMOGRAPHY_CAMERA_BOTTOMLEFT_X, HOMOGRAPHY_CAMERA_BOTTOMLEFT_Y,
         HOMOGRAPHY_CAMERA_BOTTOMRIGHT_X, HOMOGRAPHY_CAMERA_BOTTOMRIGHT_Y);
-    final TrcHomographyMapper.Rectangle worldRect = new TrcHomographyMapper.Rectangle(
+    private static final TrcHomographyMapper.Rectangle worldRect = new TrcHomographyMapper.Rectangle(
         HOMOGRAPHY_WORLD_TOPLEFT_X, HOMOGRAPHY_WORLD_TOPLEFT_Y,
         HOMOGRAPHY_WORLD_TOPRIGHT_X, HOMOGRAPHY_WORLD_TOPRIGHT_Y,
         HOMOGRAPHY_WORLD_BOTTOMLEFT_X, HOMOGRAPHY_WORLD_BOTTOMLEFT_Y,
@@ -96,7 +101,8 @@ public class FtcTestEocvVision extends FtcOpMode
             OpenCvCameraFactory.getInstance().createWebcam(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), cameraViewId);
         eocvVision = new EocvVision(
-            "EocvVision", 320, 240, cameraRect, worldRect, webcam, OpenCvCameraRotation.UPRIGHT, true, null);
+            "EocvVision", CAMERA_IMAGE_WIDTH, CAMERA_IMAGE_HEIGHT, cameraRect, worldRect, webcam,
+            OpenCvCameraRotation.UPRIGHT, true, null);
     }   //initRobot
 
     //
@@ -119,18 +125,18 @@ public class FtcTestEocvVision extends FtcOpMode
     @Override
     public void slowPeriodic(double elapsedTime)
     {
-        TrcOpenCVDetector.DetectedObject[] detectedObjects = eocvVision.getDetectedObjects();
         final int maxNumLines = 5;
         int lineIndex = 1;
         int endLine = lineIndex + maxNumLines;
+        int numTargets;
+        TrcVisionTargetInfo<?>[] targetsInfo = eocvVision.getDetectedTargetsInfo(null, null, 0.0, CAMERA_HEIGHT_OFFSET);
 
-        if (detectedObjects != null)
+        if (targetsInfo != null)
         {
-            int numTargets = Math.min(detectedObjects.length, maxNumLines);
-
+            numTargets = Math.min(targetsInfo.length, maxNumLines);
             for (int i = 0; i < numTargets; i++)
             {
-                dashboard.displayPrintf(lineIndex, "[%d] %s", i, detectedObjects[i]);
+                dashboard.displayPrintf(lineIndex, "[%d] %s", i, targetsInfo[i]);
                 lineIndex++;
             }
         }
