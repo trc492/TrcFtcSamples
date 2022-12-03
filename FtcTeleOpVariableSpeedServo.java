@@ -29,7 +29,7 @@ import TrcCommonLib.trclib.TrcRobot;
 import TrcFtcLib.ftclib.FtcDashboard;
 import TrcFtcLib.ftclib.FtcGamepad;
 import TrcFtcLib.ftclib.FtcOpMode;
-import TrcFtcLib.ftclib.FtcServoActuator;
+import TrcFtcLib.ftclib.FtcServo;
 
 /**
  * This opmode demonstrates speed controlling a servo arm.
@@ -44,10 +44,6 @@ public class FtcTeleOpVariableSpeedServo extends FtcOpMode
     static final double ARM_MAX_STEPRATE                = 0.2;
     static final double ARM_MIN_POS                     = 0.0;
     static final double ARM_MAX_POS                     = 1.0;
-    static final double ARM_RELEASE_POS                 = 0.0;
-    static final double ARM_RELEASE_TIME                = 0.5;
-    static final double ARM_GRAB_POS                    = 1.0;
-    static final double ARM_GRAB_TIME                   = 0.5;
 
     private FtcDashboard dashboard;
     //
@@ -57,7 +53,7 @@ public class FtcTeleOpVariableSpeedServo extends FtcOpMode
     //
     // Arm subsystem.
     //
-    private FtcServoActuator arm;
+    private FtcServo arm;
 
     //
     // Implements FtcOpMode abstract methods.
@@ -66,11 +62,6 @@ public class FtcTeleOpVariableSpeedServo extends FtcOpMode
     @Override
     public void initRobot()
     {
-        final FtcServoActuator.Parameters armParams = new FtcServoActuator.Parameters()
-                .setStepParams(ARM_MAX_STEPRATE, ARM_MIN_POS, ARM_MAX_POS)
-                .setInverted(false, false)
-                .setRetractParams(ARM_GRAB_POS, ARM_GRAB_TIME)
-                .setExtendParams(ARM_RELEASE_POS, ARM_RELEASE_TIME);
 
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -82,7 +73,8 @@ public class FtcTeleOpVariableSpeedServo extends FtcOpMode
         //
         // Arm subsystem.
         //
-        arm = new FtcServoActuator("armServo", armParams);
+        arm = new FtcServo("arm");
+        arm.setStepMode(ARM_MAX_STEPRATE, ARM_MIN_POS, ARM_MAX_POS);
         arm.setPosition(ARM_MIN_POS);
     }   //initRobot
 

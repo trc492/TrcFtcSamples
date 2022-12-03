@@ -202,7 +202,7 @@ public class K9Robot
         // Then we can use pidLineFollow to follow the line.
         colorTrigger = new TrcAnalogSensorTrigger<>(
                 "colorTrigger", colorSensor, 0, FtcMRColorSensor.DataType.WHITE,
-                new double[]{COLOR_BLACK, COLOR_WHITE}, this::triggerEvent, true);
+                new double[]{COLOR_BLACK, COLOR_WHITE}, true, this::triggerEvent);
         //
         // PID line follow using Optical Distance sensor.
         //
@@ -215,7 +215,7 @@ public class K9Robot
         // Then we can use lineFollowDrive to follow the line.
         lightTrigger = new TrcAnalogSensorTrigger<>(
                 "lightTrigger", lightSensor, 0, FtcOpticalDistanceSensor.DataType.RAW_LIGHT_DETECTED,
-                new double[]{LIGHT_DARK_LEVEL, LIGHT_WHITE_LEVEL}, this::triggerEvent, true);
+                new double[]{LIGHT_DARK_LEVEL, LIGHT_WHITE_LEVEL}, true, this::triggerEvent);
         //
         // PID IR seeking.
         //
@@ -263,13 +263,13 @@ public class K9Robot
     /**
      * This method is called when a threshold has been crossed.
      *
-     * @param currZone specifies the zone it is going into.
-     * @param prevZone specifies the zone it is coming out of.
-     * @param zoneValue specifies the actual sensor value.
+     * @param context specifies the callback context.
      */
-    private void triggerEvent(int currZone, int prevZone, double zoneValue)
+    private void triggerEvent(Object context)
+//        int currZone, int prevZone, double zoneValue)
     {
-        if (pidDrive.isActive() && currZone > 0)
+        TrcAnalogSensorTrigger.CallbackContext callbackContext = (TrcAnalogSensorTrigger.CallbackContext) context;
+        if (pidDrive.isActive() && callbackContext.currZone > 0)
         {
             pidDrive.cancel();
         }

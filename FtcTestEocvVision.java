@@ -32,7 +32,6 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import TrcCommonLib.trclib.TrcHomographyMapper;
-import TrcCommonLib.trclib.TrcOpenCvDetector;
 import TrcCommonLib.trclib.TrcRobot;
 import TrcCommonLib.trclib.TrcVisionTargetInfo;
 import TrcFtcLib.ftclib.FtcDashboard;
@@ -102,7 +101,7 @@ public class FtcTestEocvVision extends FtcOpMode
                 hardwareMap.get(WebcamName.class, "Webcam 1"), cameraViewId);
         eocvVision = new EocvVision(
             "EocvVision", CAMERA_IMAGE_WIDTH, CAMERA_IMAGE_HEIGHT, cameraRect, worldRect, webcam,
-            OpenCvCameraRotation.UPRIGHT, true, null);
+            OpenCvCameraRotation.UPRIGHT, null);
     }   //initRobot
 
     //

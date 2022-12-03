@@ -106,7 +106,7 @@ public class FtcTeleOpK9ArcadeDrive extends FtcOpMode implements TrcGameControll
                     }
                     else
                     {
-                        robot.arm.stop();
+                        robot.arm.cancel();
                     }
                     break;
 
@@ -117,7 +117,7 @@ public class FtcTeleOpK9ArcadeDrive extends FtcOpMode implements TrcGameControll
                     }
                     else
                     {
-                        robot.arm.stop();
+                        robot.arm.cancel();
                     }
                     break;
 
@@ -128,7 +128,7 @@ public class FtcTeleOpK9ArcadeDrive extends FtcOpMode implements TrcGameControll
                     }
                     else
                     {
-                        robot.claw.stop();
+                        robot.claw.cancel();
                     }
                     break;
 
@@ -139,7 +139,7 @@ public class FtcTeleOpK9ArcadeDrive extends FtcOpMode implements TrcGameControll
                     }
                     else
                     {
-                        robot.claw.stop();
+                        robot.claw.cancel();
                     }
                     break;
             }

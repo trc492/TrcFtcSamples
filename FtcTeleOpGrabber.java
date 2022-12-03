@@ -26,9 +26,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import TrcCommonLib.trclib.TrcGameController;
+import TrcCommonLib.trclib.TrcServoGrabber;
 import TrcFtcLib.ftclib.FtcGamepad;
 import TrcFtcLib.ftclib.FtcOpMode;
-import TrcFtcLib.ftclib.FtcServoActuator;
+import TrcFtcLib.ftclib.FtcServo;
 
 /**
  * This opmode demonstrates TeleOp control of a grabber built with two servo motors.
@@ -43,13 +44,13 @@ public class FtcTeleOpGrabber extends FtcOpMode implements TrcGameController.But
     static final double GRABBER_MAX_STEPRATE            = 0.0;
     static final double GRABBER_MIN_POS                 = 0.0;
     static final double GRABBER_MAX_POS                 = 1.0;
-    static final double GRABBER_RELEASE_POS             = 0.0;
-    static final double GRABBER_RELEASE_TIME            = 0.5;
-    static final double GRABBER_GRAB_POS                = 1.0;
-    static final double GRABBER_GRAB_TIME               = 0.5;
+    static final double GRABBER_OPEN_POS                = 0.0;
+    static final double GRABBER_OPEN_TIME               = 0.5;
+    static final double GRABBER_CLOSE_POS               = 1.0;
+    static final double GRABBER_CLOSE_TIME              = 0.5;
 
     private FtcGamepad gamepad;
-    private FtcServoActuator grabber;
+    private TrcServoGrabber grabber;
 
     //
     // Implements FtcOpMode abstract methods.
@@ -58,15 +59,17 @@ public class FtcTeleOpGrabber extends FtcOpMode implements TrcGameController.But
     @Override
     public void initRobot()
     {
-        final FtcServoActuator.Parameters grabberParams = new FtcServoActuator.Parameters()
+        final TrcServoGrabber.Parameters grabberParams = new TrcServoGrabber.Parameters()
                 .setStepParams(GRABBER_MAX_STEPRATE, GRABBER_MIN_POS, GRABBER_MAX_POS)
-                .setInverted(true, false)
-                .setRetractParams(GRABBER_GRAB_POS, GRABBER_GRAB_TIME)
-                .setExtendParams(GRABBER_RELEASE_POS, GRABBER_RELEASE_TIME);
+                .setServoInverted(true, false)
+                .setCloseParams(GRABBER_CLOSE_POS, GRABBER_CLOSE_TIME)
+                .setOpenParams(GRABBER_OPEN_POS, GRABBER_OPEN_TIME);
 
         hardwareMap.logDevices();
 
-        grabber = new FtcServoActuator("grabberLeftServo", "grabberRightServo", grabberParams);
+        FtcServo leftServo = new FtcServo("grabberLeftServo");
+        FtcServo rightServo = new FtcServo("grabberRightServo");
+        grabber = new TrcServoGrabber("grabber", leftServo, rightServo, grabberParams, null);
         //
         // Initializing gamepads.
         //
