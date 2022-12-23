@@ -27,15 +27,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 import TrcCommonLib.trclib.TrcHomographyMapper;
 import TrcCommonLib.trclib.TrcRobot;
 import TrcCommonLib.trclib.TrcVisionTargetInfo;
 import TrcFtcLib.ftclib.FtcDashboard;
 import TrcFtcLib.ftclib.FtcOpMode;
+import teamcode.RobotParams;
 
 /**
  * This opmode demonstrates the use of EasyOpenCV Vision.
@@ -96,9 +97,11 @@ public class FtcTestEocvVision extends FtcOpMode
         //
         int cameraViewId = hardwareMap.appContext.getResources().getIdentifier(
             "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        OpenCvCamera webcam =
+        OpenCvWebcam webcam =
             OpenCvCameraFactory.getInstance().createWebcam(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), cameraViewId);
+        webcam.showFpsMeterOnViewport(false);
+        webcam.setMillisecondsPermissionTimeout(RobotParams.WEBCAM_PERMISSION_TIMEOUT);
         eocvVision = new EocvVision(
             "EocvVision", CAMERA_IMAGE_WIDTH, CAMERA_IMAGE_HEIGHT, cameraRect, worldRect, webcam,
             OpenCvCameraRotation.UPRIGHT, null);
