@@ -141,7 +141,7 @@ public class FtcTestSensorSampleTime extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void fastPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
         long currTime = System.nanoTime();
         double  currSample = getSensorValue();
@@ -178,7 +178,7 @@ public class FtcTestSensorSampleTime extends FtcOpMode
         }
         prevLoopTime = currTime;
         loopCount++;
-    }   //fastPeriodic
+    }   //periodic
 
     private double getSensorValue()
     {

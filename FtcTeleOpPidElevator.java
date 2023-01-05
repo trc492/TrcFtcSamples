@@ -121,25 +121,28 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        //
-        // Elevator subsystem.
-        //
-        double elevatorPower = gamepad.getRightStickY(true);
-        if (elevatorManualOverride)
+        if (slowPeriodicLoop)
         {
-            elevator.setPower(elevatorPower);
-        }
-        else
-        {
-            elevator.setPidPower(elevatorPower);
-        }
-        dashboard.displayPrintf(
+            //
+            // Elevator subsystem.
+            //
+            double elevatorPower = gamepad.getRightStickY(true);
+            if (elevatorManualOverride)
+            {
+                elevator.setPower(elevatorPower);
+            }
+            else
+            {
+                elevator.setPidPower(elevatorPower);
+            }
+            dashboard.displayPrintf(
                 1, "Elevator:power=%.2f,height=%.2f,lowerLimit=%s,upperLimit=%s",
                 elevatorPower, elevator.getPosition(), elevator.isLowerLimitSwitchActive(),
                 elevator.isUpperLimitSwitchActive());
-    }   //slowPeriodic
+        }
+    }   //periodic
 
     //
     // Implements TrcGameController.ButtonHandler interface.

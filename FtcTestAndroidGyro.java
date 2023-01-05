@@ -82,22 +82,25 @@ public class FtcTestAndroidGyro extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 100;
+        if (slowPeriodicLoop)
+        {
+            final int LABEL_WIDTH = 100;
 
-        dashboard.displayPrintf(1, LABEL_WIDTH, "Raw: ", "x=%.2f,y=%.2f,z=%.2f (rad/s)",
-                                gyro.getRawXData(TrcGyro.DataType.ROTATION_RATE).value,
-                                gyro.getRawYData(TrcGyro.DataType.ROTATION_RATE).value,
-                                gyro.getRawZData(TrcGyro.DataType.ROTATION_RATE).value);
-        dashboard.displayPrintf(2, LABEL_WIDTH, "Rot: ", "x=%.2f,y=%.2f,z=%.2f (deg/s)",
-                                gyro.getXRotationRate().value,
-                                gyro.getYRotationRate().value,
-                                gyro.getZRotationRate().value);
-        dashboard.displayPrintf(3, LABEL_WIDTH, "Heading: ", "x=%.2f,y=%.2f,z=%.2f (deg)",
-                                gyro.getXHeading().value,
-                                gyro.getYHeading().value,
-                                gyro.getZHeading().value);
-    }   //slowPeriodic
+            dashboard.displayPrintf(1, LABEL_WIDTH, "Raw: ", "x=%.2f,y=%.2f,z=%.2f (rad/s)",
+                                    gyro.getRawXData(TrcGyro.DataType.ROTATION_RATE).value,
+                                    gyro.getRawYData(TrcGyro.DataType.ROTATION_RATE).value,
+                                    gyro.getRawZData(TrcGyro.DataType.ROTATION_RATE).value);
+            dashboard.displayPrintf(2, LABEL_WIDTH, "Rot: ", "x=%.2f,y=%.2f,z=%.2f (deg/s)",
+                                    gyro.getXRotationRate().value,
+                                    gyro.getYRotationRate().value,
+                                    gyro.getZRotationRate().value);
+            dashboard.displayPrintf(3, LABEL_WIDTH, "Heading: ", "x=%.2f,y=%.2f,z=%.2f (deg)",
+                                    gyro.getXHeading().value,
+                                    gyro.getYHeading().value,
+                                    gyro.getZHeading().value);
+        }
+    }   //periodic
 
 }   //class FtcTestAndroidGyro

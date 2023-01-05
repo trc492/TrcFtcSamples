@@ -227,16 +227,19 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
     }   //stopMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        double left = gamepad.getLeftStickY(true);
-        double right = gamepad.getRightStickY(true);
-        driveBase.tankDrive(left, right);
+        if (slowPeriodicLoop)
+        {
+            double left = gamepad.getLeftStickY(true);
+            double right = gamepad.getRightStickY(true);
+            driveBase.tankDrive(left, right);
 
-        dashboard.displayPrintf(1, "Power(L/R) = %.2f/%.2f", left, right);
-        dashboard.displayPrintf(2, "GyroHeading = %.2f", gyro.getZHeading().value);
-        dashboard.displayPrintf(3, "SoundEnvelope = %s", envelopeToggle.getState()? "ON": "OFF");
-    }   //slowPeriodic
+            dashboard.displayPrintf(1, "Power(L/R) = %.2f/%.2f", left, right);
+            dashboard.displayPrintf(2, "GyroHeading = %.2f", gyro.getZHeading().value);
+            dashboard.displayPrintf(3, "SoundEnvelope = %s", envelopeToggle.getState() ? "ON" : "OFF");
+        }
+    }   //periodic
 
     //
     // Implements TrcGameController.ButtonHandler interface.

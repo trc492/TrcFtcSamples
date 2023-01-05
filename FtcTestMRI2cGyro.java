@@ -71,25 +71,28 @@ public class FtcTestMRI2cGyro extends FtcOpMode
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 200;
-        dashboard.displayPrintf(1, LABEL_WIDTH, "FirmwareRev: ", "%x", gyro.getFirmwareRevision());
-        dashboard.displayPrintf(2, LABEL_WIDTH, "ManufacturerCode: ", "%x", gyro.getManufacturerCode());
-        dashboard.displayPrintf(3, LABEL_WIDTH, "IDCode: ", "%x", gyro.getIdCode());
-        TrcSensor.SensorData<Double> data = gyro.getHeading();
-        //
-        // The data may not be ready yet, check it!
-        //
-        if (data.value != null)
+        if (slowPeriodicLoop)
         {
-            dashboard.displayPrintf(4, LABEL_WIDTH, "Heading: ", "%.0f", gyro.getHeading().value);
-            dashboard.displayPrintf(5, LABEL_WIDTH, "IntegratedZ: ", "%.0f", gyro.getIntegratedZ().value);
-            dashboard.displayPrintf(6, LABEL_WIDTH, "RawXYZ: ", "%.0f/%.0f/%.0f",
-                                    gyro.getRawX().value, gyro.getRawY().value, gyro.getRawZ().value);
-            dashboard.displayPrintf(7, LABEL_WIDTH, "ZOffset: ", "%.0f", gyro.getZOffset().value);
-            dashboard.displayPrintf(8, LABEL_WIDTH, "ZScaling: ", "%.0f", gyro.getZScaling().value);
+            final int LABEL_WIDTH = 200;
+            dashboard.displayPrintf(1, LABEL_WIDTH, "FirmwareRev: ", "%x", gyro.getFirmwareRevision());
+            dashboard.displayPrintf(2, LABEL_WIDTH, "ManufacturerCode: ", "%x", gyro.getManufacturerCode());
+            dashboard.displayPrintf(3, LABEL_WIDTH, "IDCode: ", "%x", gyro.getIdCode());
+            TrcSensor.SensorData<Double> data = gyro.getHeading();
+            //
+            // The data may not be ready yet, check it!
+            //
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(4, LABEL_WIDTH, "Heading: ", "%.0f", gyro.getHeading().value);
+                dashboard.displayPrintf(5, LABEL_WIDTH, "IntegratedZ: ", "%.0f", gyro.getIntegratedZ().value);
+                dashboard.displayPrintf(6, LABEL_WIDTH, "RawXYZ: ", "%.0f/%.0f/%.0f",
+                                        gyro.getRawX().value, gyro.getRawY().value, gyro.getRawZ().value);
+                dashboard.displayPrintf(7, LABEL_WIDTH, "ZOffset: ", "%.0f", gyro.getZOffset().value);
+                dashboard.displayPrintf(8, LABEL_WIDTH, "ZScaling: ", "%.0f", gyro.getZScaling().value);
+            }
         }
-    }   //slowPeriodic
+    }   //periodic
 
 }   //class FtcTestMRI2cGyro

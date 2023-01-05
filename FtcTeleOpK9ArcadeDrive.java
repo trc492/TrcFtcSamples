@@ -72,21 +72,24 @@ public class FtcTeleOpK9ArcadeDrive extends FtcOpMode implements TrcGameControll
     }   //stopMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        //
-        // DriveBase subsystem.
-        //
-        double throttle = gamepad.getLeftStickY(true);
-        double direction = gamepad.getLeftStickX(true);
-        robot.driveBase.arcadeDrive(throttle, direction);
+        if (slowPeriodicLoop)
+        {
+            //
+            // DriveBase subsystem.
+            //
+            double throttle = gamepad.getLeftStickY(true);
+            double direction = gamepad.getLeftStickX(true);
+            robot.driveBase.arcadeDrive(throttle, direction);
 
-        robot.dashboard.displayPrintf(1, "Text: *** Robot Data ***");
-        robot.dashboard.displayPrintf(2, "arm: %.2f", robot.arm.getPosition());
-        robot.dashboard.displayPrintf(3, "claw: %.2f", robot.claw.getPosition());
-        robot.dashboard.displayPrintf(4, "throttle: %.2f", throttle);
-        robot.dashboard.displayPrintf(5, "direction: %.2f", direction);
-    }   //slowPeriodic
+            robot.dashboard.displayPrintf(1, "Text: *** Robot Data ***");
+            robot.dashboard.displayPrintf(2, "arm: %.2f", robot.arm.getPosition());
+            robot.dashboard.displayPrintf(3, "claw: %.2f", robot.claw.getPosition());
+            robot.dashboard.displayPrintf(4, "throttle: %.2f", throttle);
+            robot.dashboard.displayPrintf(5, "direction: %.2f", direction);
+        }
+    }   //periodic
 
     //
     // Implements TrcGameController.ButtonHandler interface.

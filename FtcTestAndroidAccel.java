@@ -98,25 +98,28 @@ public class FtcTestAndroidAccel extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 100;
-        dashboard.displayPrintf(1, LABEL_WIDTH, "Raw: ", "x=%.2f,y=%.2f,z=%.2f",
-                                accel.getRawXData(TrcAccelerometer.DataType.ACCELERATION).value,
-                                accel.getRawYData(TrcAccelerometer.DataType.ACCELERATION).value,
-                                accel.getRawZData(TrcAccelerometer.DataType.ACCELERATION).value);
-        dashboard.displayPrintf(2, LABEL_WIDTH, "Accel: ", "x=%.2f,y=%.2f,z=%.2f (in/s2)",
-                                accel.getXAcceleration().value,
-                                accel.getYAcceleration().value,
-                                accel.getZAcceleration().value);
-        dashboard.displayPrintf(3, LABEL_WIDTH, "Vel: ", "x=%.2f,y=%.2f,z=%.2f (in/s)",
-                                accel.getXVelocity().value,
-                                accel.getYVelocity().value,
-                                accel.getZVelocity().value);
-        dashboard.displayPrintf(4, LABEL_WIDTH, "Dist: ", "x=%.2f,y=%.2f,z=%.2f (in)",
-                                accel.getXDistance().value,
-                                accel.getYDistance().value,
-                                accel.getZDistance().value);
-    }   //slowPeriodic
+        if (slowPeriodicLoop)
+        {
+            final int LABEL_WIDTH = 100;
+            dashboard.displayPrintf(1, LABEL_WIDTH, "Raw: ", "x=%.2f,y=%.2f,z=%.2f",
+                                    accel.getRawXData(TrcAccelerometer.DataType.ACCELERATION).value,
+                                    accel.getRawYData(TrcAccelerometer.DataType.ACCELERATION).value,
+                                    accel.getRawZData(TrcAccelerometer.DataType.ACCELERATION).value);
+            dashboard.displayPrintf(2, LABEL_WIDTH, "Accel: ", "x=%.2f,y=%.2f,z=%.2f (in/s2)",
+                                    accel.getXAcceleration().value,
+                                    accel.getYAcceleration().value,
+                                    accel.getZAcceleration().value);
+            dashboard.displayPrintf(3, LABEL_WIDTH, "Vel: ", "x=%.2f,y=%.2f,z=%.2f (in/s)",
+                                    accel.getXVelocity().value,
+                                    accel.getYVelocity().value,
+                                    accel.getZVelocity().value);
+            dashboard.displayPrintf(4, LABEL_WIDTH, "Dist: ", "x=%.2f,y=%.2f,z=%.2f (in)",
+                                    accel.getXDistance().value,
+                                    accel.getYDistance().value,
+                                    accel.getZDistance().value);
+        }
+    }   //periodic
 
 }   //class FtcTestAndroidAccel

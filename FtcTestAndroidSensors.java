@@ -208,113 +208,117 @@ public class FtcTestAndroidSensors extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 160;
-        if (accel != null)
+        if (slowPeriodicLoop)
         {
-            dashboard.displayPrintf(1, LABEL_WIDTH, "Accel: ", "x=%.2f,y=%.2f,z=%.2f (m/s2)",
-                                    accel.getProcessedData(0, null).value,
-                                    accel.getProcessedData(1, null).value,
-                                    accel.getProcessedData(2, null).value);
-        }
-        else
-        {
-            dashboard.displayPrintf(1, LABEL_WIDTH, "Accel: ", "none.");
-        }
+            final int LABEL_WIDTH = 160;
+            if (accel != null)
+            {
+                dashboard.displayPrintf(1, LABEL_WIDTH, "Accel: ", "x=%.2f,y=%.2f,z=%.2f (m/s2)",
+                                        accel.getProcessedData(0, null).value,
+                                        accel.getProcessedData(1, null).value,
+                                        accel.getProcessedData(2, null).value);
+            }
+            else
+            {
+                dashboard.displayPrintf(1, LABEL_WIDTH, "Accel: ", "none.");
+            }
 
-        if (gravity != null)
-        {
-            dashboard.displayPrintf(2, LABEL_WIDTH, "Gravity: ", "x=%.2f,y=%.2f,z=%.2f (m/s2)",
-                                    gravity.getProcessedData(0, null).value,
-                                    gravity.getProcessedData(1, null).value,
-                                    gravity.getProcessedData(2, null).value);
-        }
-        else
-        {
-            dashboard.displayPrintf(2, LABEL_WIDTH, "Gravity: ", "none.");
-        }
+            if (gravity != null)
+            {
+                dashboard.displayPrintf(2, LABEL_WIDTH, "Gravity: ", "x=%.2f,y=%.2f,z=%.2f (m/s2)",
+                                        gravity.getProcessedData(0, null).value,
+                                        gravity.getProcessedData(1, null).value,
+                                        gravity.getProcessedData(2, null).value);
+            }
+            else
+            {
+                dashboard.displayPrintf(2, LABEL_WIDTH, "Gravity: ", "none.");
+            }
 
-        if (gyro != null)
-        {
-            dashboard.displayPrintf(3, LABEL_WIDTH, "Gyro: ", "x=%.2f,y=%.2f,z=%.2f (deg/s)",
-                                    (Double)gyro.getProcessedData(0, null).value * 180.0 / Math.PI,
-                                    (Double)gyro.getProcessedData(1, null).value * 180.0 / Math.PI,
-                                    (Double)gyro.getProcessedData(2, null).value * 180.0 / Math.PI);
-        }
-        else
-        {
-            dashboard.displayPrintf(3, LABEL_WIDTH, "Gyro: ", "none.");
-        }
+            if (gyro != null)
+            {
+                dashboard.displayPrintf(3, LABEL_WIDTH, "Gyro: ", "x=%.2f,y=%.2f,z=%.2f (deg/s)",
+                                        (Double) gyro.getProcessedData(0, null).value*180.0/Math.PI,
+                                        (Double) gyro.getProcessedData(1, null).value*180.0/Math.PI,
+                                        (Double) gyro.getProcessedData(2, null).value*180.0/Math.PI);
+            }
+            else
+            {
+                dashboard.displayPrintf(3, LABEL_WIDTH, "Gyro: ", "none.");
+            }
 
-        if (linearAccel != null)
-        {
-            dashboard.displayPrintf(4, LABEL_WIDTH, "LinearAccel: ", "x=%.2f,y=%.2f,z=%.2f (m/s2)",
-                                    linearAccel.getProcessedData(0, null).value,
-                                    linearAccel.getProcessedData(1, null).value,
-                                    linearAccel.getProcessedData(2, null).value);
-        }
-        else
-        {
-            dashboard.displayPrintf(4, LABEL_WIDTH, "LinearAccel: ", "none.");
-        }
+            if (linearAccel != null)
+            {
+                dashboard.displayPrintf(4, LABEL_WIDTH, "LinearAccel: ", "x=%.2f,y=%.2f,z=%.2f (m/s2)",
+                                        linearAccel.getProcessedData(0, null).value,
+                                        linearAccel.getProcessedData(1, null).value,
+                                        linearAccel.getProcessedData(2, null).value);
+            }
+            else
+            {
+                dashboard.displayPrintf(4, LABEL_WIDTH, "LinearAccel: ", "none.");
+            }
 
-        if (rotation != null)
-        {
-            dashboard.displayPrintf(5, LABEL_WIDTH, "Rotation: ", "x=%.2f,y=%.2f,z=%.2f,s=%.2f",
-                                    rotation.getProcessedData(0, null).value,
-                                    rotation.getProcessedData(1, null).value,
-                                    rotation.getProcessedData(2, null).value,
-                                    rotation.getProcessedData(3, null).value);
-        }
-        else
-        {
-            dashboard.displayPrintf(5, LABEL_WIDTH, "Rotation: ", "none.");
-        }
+            if (rotation != null)
+            {
+                dashboard.displayPrintf(5, LABEL_WIDTH, "Rotation: ", "x=%.2f,y=%.2f,z=%.2f,s=%.2f",
+                                        rotation.getProcessedData(0, null).value,
+                                        rotation.getProcessedData(1, null).value,
+                                        rotation.getProcessedData(2, null).value,
+                                        rotation.getProcessedData(3, null).value);
+            }
+            else
+            {
+                dashboard.displayPrintf(5, LABEL_WIDTH, "Rotation: ", "none.");
+            }
 
-        if (magnetic != null)
-        {
-            dashboard.displayPrintf(6, LABEL_WIDTH, "Magnetic: ", "x=%.2f,y=%.2f,z=%.2f (uT)",
-                                    magnetic.getProcessedData(0, null).value,
-                                    magnetic.getProcessedData(1, null).value,
-                                    magnetic.getProcessedData(2, null).value);
-        }
-        else
-        {
-            dashboard.displayPrintf(6, LABEL_WIDTH, "Magnetic: ", "none.");
-        }
+            if (magnetic != null)
+            {
+                dashboard.displayPrintf(6, LABEL_WIDTH, "Magnetic: ", "x=%.2f,y=%.2f,z=%.2f (uT)",
+                                        magnetic.getProcessedData(0, null).value,
+                                        magnetic.getProcessedData(1, null).value,
+                                        magnetic.getProcessedData(2, null).value);
+            }
+            else
+            {
+                dashboard.displayPrintf(6, LABEL_WIDTH, "Magnetic: ", "none.");
+            }
 
-        /*
-        if (orientation != null)
-        {
-            dashboard.displayPrintf(7, LABEL_WIDTH, "Orientation: ", "Azimuth=%.2f,Pitch=%.2f,Roll=%.2f (deg)",
-                                    orientation.getProcessedData(0, null).value,
-                                    orientation.getProcessedData(1, null).value,
-                                    orientation.getProcessedData(2, null).value);
-        }
-        else
-        {
-            dashboard.displayPrintf(7, LABEL_WIDTH, "Orietation: ", "none.");
-        }
-        */
+            /*
+            if (orientation != null)
+            {
+                dashboard.displayPrintf(7, LABEL_WIDTH, "Orientation: ", "Azimuth=%.2f,Pitch=%.2f,Roll=%.2f (deg)",
+                                        orientation.getProcessedData(0, null).value,
+                                        orientation.getProcessedData(1, null).value,
+                                        orientation.getProcessedData(2, null).value);
+            }
+            else
+            {
+                dashboard.displayPrintf(7, LABEL_WIDTH, "Orietation: ", "none.");
+            }
+            */
 
-        if (proximity != null)
-        {
-            dashboard.displayPrintf(8, LABEL_WIDTH, "Proximity: ", "%.0f cm", proximity.getProcessedData(0, null).value);
-        }
-        else
-        {
-            dashboard.displayPrintf(8, LABEL_WIDTH, "Proximity: ", "none.");
-        }
+            if (proximity != null)
+            {
+                dashboard.displayPrintf(
+                    8, LABEL_WIDTH, "Proximity: ", "%.0f cm", proximity.getProcessedData(0, null).value);
+            }
+            else
+            {
+                dashboard.displayPrintf(8, LABEL_WIDTH, "Proximity: ", "none.");
+            }
 
-        if (light != null)
-        {
-            dashboard.displayPrintf(9, LABEL_WIDTH, "Light: ", "%.0f lux", light.getProcessedData(0, null).value);
+            if (light != null)
+            {
+                dashboard.displayPrintf(9, LABEL_WIDTH, "Light: ", "%.0f lux", light.getProcessedData(0, null).value);
+            }
+            else
+            {
+                dashboard.displayPrintf(9, LABEL_WIDTH, "Light: ", "none.");
+            }
         }
-        else
-        {
-            dashboard.displayPrintf(9, LABEL_WIDTH, "Light: ", "none.");
-        }
-    }   //slowPeriodic
+    }   //periodic
 
 }   //class FtcTestAndroidSensors

@@ -74,27 +74,30 @@ public class FtcTestMRRangeSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 200;
-        dashboard.displayPrintf(1, LABEL_WIDTH, "Range: ", "%.3f in", rangeSensor.getDistance(DistanceUnit.INCH));
-        dashboard.displayPrintf(2, LABEL_WIDTH, "FirmwareRev: ", "%x", i2cRangeSensor.getFirmwareRevision());
-        dashboard.displayPrintf(3, LABEL_WIDTH, "ManufacturerCode: ", "%x", i2cRangeSensor.getManufacturerCode());
-        dashboard.displayPrintf(4, LABEL_WIDTH, "IDCode: ", "%x", i2cRangeSensor.getIdCode());
-        TrcSensor.SensorData<Double> ultrasonicDistance = i2cRangeSensor.getUltrasonicDistance();
-        TrcSensor.SensorData<Double> opticalDistance = i2cRangeSensor.getOpticalDistance();
-        //
-        // The data may not be ready yet, check it!
-        //
-        if (ultrasonicDistance.value != null)
+        if (slowPeriodicLoop)
         {
-            dashboard.displayPrintf(5, LABEL_WIDTH, "Ultrasonic distance: ", "%.0f", ultrasonicDistance.value);
-        }
+            final int LABEL_WIDTH = 200;
+            dashboard.displayPrintf(1, LABEL_WIDTH, "Range: ", "%.3f in", rangeSensor.getDistance(DistanceUnit.INCH));
+            dashboard.displayPrintf(2, LABEL_WIDTH, "FirmwareRev: ", "%x", i2cRangeSensor.getFirmwareRevision());
+            dashboard.displayPrintf(3, LABEL_WIDTH, "ManufacturerCode: ", "%x", i2cRangeSensor.getManufacturerCode());
+            dashboard.displayPrintf(4, LABEL_WIDTH, "IDCode: ", "%x", i2cRangeSensor.getIdCode());
+            TrcSensor.SensorData<Double> ultrasonicDistance = i2cRangeSensor.getUltrasonicDistance();
+            TrcSensor.SensorData<Double> opticalDistance = i2cRangeSensor.getOpticalDistance();
+            //
+            // The data may not be ready yet, check it!
+            //
+            if (ultrasonicDistance.value != null)
+            {
+                dashboard.displayPrintf(5, LABEL_WIDTH, "Ultrasonic distance: ", "%.0f", ultrasonicDistance.value);
+            }
 
-        if (opticalDistance.value != null)
-        {
-            dashboard.displayPrintf(6, LABEL_WIDTH, "Optical distance: ", "%.0f", opticalDistance.value);
+            if (opticalDistance.value != null)
+            {
+                dashboard.displayPrintf(6, LABEL_WIDTH, "Optical distance: ", "%.0f", opticalDistance.value);
+            }
         }
-    }   //slowPeriodic
+    }   //periodic
 
 }   //class FtcTestMRRangeSensor

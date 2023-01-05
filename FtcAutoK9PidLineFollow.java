@@ -91,7 +91,7 @@ public class FtcAutoK9PidLineFollow extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void fastPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
         State state = sm.checkReadyAndGetState();
 
@@ -160,6 +160,6 @@ public class FtcAutoK9PidLineFollow extends FtcOpMode
             robot.gyroPidCtrl.displayPidInfo(10);
             robot.lightPidCtrl.displayPidInfo(12);
         }
-    }   //fastPeriodic
+    }   //periodic
 
 }   //class FtcAutoK9PidLineFollow

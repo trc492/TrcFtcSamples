@@ -86,21 +86,24 @@ public class FtcTeleOpMecanumDrive extends FtcOpMode implements TrcGameControlle
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        //
-        // DriveBase subsystem.
-        //
-        double x = gamepad.getLeftStickX(true);
-        double y = gamepad.getRightStickY(true);
-        double rotation = gamepad.getRightTrigger(true) - gamepad.getLeftTrigger(true);
-        driveBase.holonomicDrive(x, y, rotation, false);
+        if (slowPeriodicLoop)
+        {
+            //
+            // DriveBase subsystem.
+            //
+            double x = gamepad.getLeftStickX(true);
+            double y = gamepad.getRightStickY(true);
+            double rotation = gamepad.getRightTrigger(true) - gamepad.getLeftTrigger(true);
+            driveBase.holonomicDrive(x, y, rotation, false);
 
-        dashboard.displayPrintf(1, "Text: *** Robot Data ***");
-        dashboard.displayPrintf(2, "x: %.2f", x);
-        dashboard.displayPrintf(3, "y: %.2f", y);
-        dashboard.displayPrintf(4, "rotation: %.2f", rotation);
-    }   //slowPeriodic
+            dashboard.displayPrintf(1, "Text: *** Robot Data ***");
+            dashboard.displayPrintf(2, "x: %.2f", x);
+            dashboard.displayPrintf(3, "y: %.2f", y);
+            dashboard.displayPrintf(4, "rotation: %.2f", rotation);
+        }
+    }   //periodic
 
     //
     // Implements TrcGameController.ButtonHandler interface.

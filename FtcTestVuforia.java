@@ -259,48 +259,51 @@ public class FtcTestVuforia extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 120;
-
-        for (int i = 0; i < imageTargets.length; i++)
+        if (slowPeriodicLoop)
         {
-            boolean visible = vuforia.isTargetVisible(imageTargets[i]);
+            final int LABEL_WIDTH = 120;
 
-            if (SPEECH_ENABLED)
+            for (int i = 0; i < imageTargets.length; i++)
             {
-                if (visible != targetsFound[i])
+                boolean visible = vuforia.isTargetVisible(imageTargets[i]);
+
+                if (SPEECH_ENABLED)
                 {
-                    targetsFound[i] = visible;
-                    String sentence = String.format(
-                            "%s is %s.", imageTargets[i].getName(), visible? "in view": "out of view");
-                    textToSpeech.speak(sentence, TextToSpeech.QUEUE_FLUSH, null);
+                    if (visible != targetsFound[i])
+                    {
+                        targetsFound[i] = visible;
+                        String sentence = String.format(
+                            "%s is %s.", imageTargets[i].getName(), visible ? "in view" : "out of view");
+                        textToSpeech.speak(sentence, TextToSpeech.QUEUE_FLUSH, null);
+                    }
                 }
-            }
 
-            OpenGLMatrix pose = vuforia.getTargetPose(imageTargets[i]);
-            if (pose != null)
-            {
-                VectorF translation = pose.getTranslation();
-                dashboard.displayPrintf(
+                OpenGLMatrix pose = vuforia.getTargetPose(imageTargets[i]);
+                if (pose != null)
+                {
+                    VectorF translation = pose.getTranslation();
+                    dashboard.displayPrintf(
                         i + 1, LABEL_WIDTH, imageTargets[i].getName() + " = ", "%6.2f,%6.2f,%6.2f",
                         translation.get(0)/TrcUtil.MM_PER_INCH,
                         translation.get(1)/TrcUtil.MM_PER_INCH,
                         -translation.get(2)/TrcUtil.MM_PER_INCH);
+                }
+
+                OpenGLMatrix robotLocation = vuforia.getRobotLocation(imageTargets[i]);
+                if (robotLocation != null)
+                {
+                    lastRobotLocation = robotLocation;
+                }
             }
 
-            OpenGLMatrix robotLocation = vuforia.getRobotLocation(imageTargets[i]);
-            if (robotLocation != null)
+            if (lastRobotLocation != null)
             {
-                lastRobotLocation = robotLocation;
+                dashboard.displayPrintf(5, LABEL_WIDTH, "RobotLoc = ",
+                                        lastRobotLocation.formatAsTransform());
             }
         }
-
-        if (lastRobotLocation != null)
-        {
-            dashboard.displayPrintf(5, LABEL_WIDTH, "RobotLoc = ",
-                    lastRobotLocation.formatAsTransform());
-        }
-    }   //slowPeriodic
+    }   //periodic
 
 }   //class FtcTestVuforia

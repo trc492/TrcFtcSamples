@@ -69,41 +69,44 @@ public class FtcTestAdaFruitColorSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 100;
-        TrcSensor.SensorData<Integer> data;
-
-        dashboard.displayPrintf(1, LABEL_WIDTH, "ID: ", "%d", sensor.getID());
-        dashboard.displayPrintf(2, LABEL_WIDTH, "Status: ", "%02x", sensor.getStatus());
-
-        //
-        // The data may not be ready yet, check it!
-        //
-
-        data = sensor.getClearValue();
-        if (data.value != null)
+        if (slowPeriodicLoop)
         {
-            dashboard.displayPrintf(3, LABEL_WIDTH, "Clear: ", "%d", data.value);
-        }
+            final int LABEL_WIDTH = 100;
+            TrcSensor.SensorData<Integer> data;
 
-        data = sensor.getRedValue();
-        if (data.value != null)
-        {
-            dashboard.displayPrintf(4, LABEL_WIDTH, "Red: ", "%d", data.value);
-        }
+            dashboard.displayPrintf(1, LABEL_WIDTH, "ID: ", "%d", sensor.getID());
+            dashboard.displayPrintf(2, LABEL_WIDTH, "Status: ", "%02x", sensor.getStatus());
 
-        data = sensor.getGreenValue();
-        if (data.value != null)
-        {
-            dashboard.displayPrintf(5, LABEL_WIDTH, "Green: ", "%d", data.value);
-        }
+            //
+            // The data may not be ready yet, check it!
+            //
 
-        data = sensor.getBlueValue();
-        if (data.value != null)
-        {
-            dashboard.displayPrintf(6, LABEL_WIDTH, "Blue: ", "%d", data.value);
+            data = sensor.getClearValue();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(3, LABEL_WIDTH, "Clear: ", "%d", data.value);
+            }
+
+            data = sensor.getRedValue();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(4, LABEL_WIDTH, "Red: ", "%d", data.value);
+            }
+
+            data = sensor.getGreenValue();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(5, LABEL_WIDTH, "Green: ", "%d", data.value);
+            }
+
+            data = sensor.getBlueValue();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(6, LABEL_WIDTH, "Blue: ", "%d", data.value);
+            }
         }
-    }   //slowPeriodic
+    }   //periodic
 
 }   //class FtcTestAdaFruitColorSensor

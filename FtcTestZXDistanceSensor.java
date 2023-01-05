@@ -69,52 +69,55 @@ public class FtcTestZXDistanceSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 200;
-        TrcSensor.SensorData<Double> data;
-
-        dashboard.displayPrintf(1, LABEL_WIDTH, "Model: ", "%d", sensor.getModelVersion());
-        dashboard.displayPrintf(2, LABEL_WIDTH, "RegVersion: ", "%d", sensor.getRegMapVersion());
-        dashboard.displayPrintf(3, LABEL_WIDTH, "Status: ", "%02x", sensor.getStatus());
-        //
-        // The data may not be ready yet, check it!
-        //
-        TrcSensor.SensorData<FtcZXDistanceSensor.Gesture>gestureData = sensor.getGesture();
-        if (gestureData.value != null)
+        if (slowPeriodicLoop)
         {
-            dashboard.displayPrintf(4, LABEL_WIDTH, "Gesture: ", "%s", gestureData.value.toString());
-        }
+            final int LABEL_WIDTH = 200;
+            TrcSensor.SensorData<Double> data;
 
-        data = sensor.getGestureSpeed();
-        if (data.value != null)
-        {
-            dashboard.displayPrintf(5, LABEL_WIDTH, "GestureSpeed: ", "%f", data.value);
-        }
+            dashboard.displayPrintf(1, LABEL_WIDTH, "Model: ", "%d", sensor.getModelVersion());
+            dashboard.displayPrintf(2, LABEL_WIDTH, "RegVersion: ", "%d", sensor.getRegMapVersion());
+            dashboard.displayPrintf(3, LABEL_WIDTH, "Status: ", "%02x", sensor.getStatus());
+            //
+            // The data may not be ready yet, check it!
+            //
+            TrcSensor.SensorData<FtcZXDistanceSensor.Gesture> gestureData = sensor.getGesture();
+            if (gestureData.value != null)
+            {
+                dashboard.displayPrintf(4, LABEL_WIDTH, "Gesture: ", "%s", gestureData.value.toString());
+            }
 
-        data = sensor.getX();
-        if (data.value != null)
-        {
-            dashboard.displayPrintf(6, LABEL_WIDTH, "X: ", "%f", data.value);
-        }
+            data = sensor.getGestureSpeed();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(5, LABEL_WIDTH, "GestureSpeed: ", "%f", data.value);
+            }
 
-        data = sensor.getZ();
-        if (data.value != null)
-        {
-            dashboard.displayPrintf(7, LABEL_WIDTH, "Z: ", "%f", data.value);
-        }
+            data = sensor.getX();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(6, LABEL_WIDTH, "X: ", "%f", data.value);
+            }
 
-        data = sensor.getLeftRangingData();
-        if (data.value != null)
-        {
-            dashboard.displayPrintf(8, LABEL_WIDTH, "LRng: ", "%f", data.value);
-        }
+            data = sensor.getZ();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(7, LABEL_WIDTH, "Z: ", "%f", data.value);
+            }
 
-        data = sensor.getRightRangingData();
-        if (data.value != null)
-        {
-            dashboard.displayPrintf(9, LABEL_WIDTH, "RRng: ", "%f", data.value);
+            data = sensor.getLeftRangingData();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(8, LABEL_WIDTH, "LRng: ", "%f", data.value);
+            }
+
+            data = sensor.getRightRangingData();
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(9, LABEL_WIDTH, "RRng: ", "%f", data.value);
+            }
         }
-    }   //runPeriodic
+    }   //periodic
 
 }   //class FtcTestAndroidSensors

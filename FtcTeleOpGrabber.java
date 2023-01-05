@@ -82,10 +82,13 @@ public class FtcTeleOpGrabber extends FtcOpMode implements TrcGameController.But
     //
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        grabber.setPosition(gamepad.getRightTrigger());
-    }   //slowPeriodic
+        if (slowPeriodicLoop)
+        {
+            grabber.setPosition(gamepad.getRightTrigger());
+        }
+    }   //periodic
 
     //
     // Implements TrcGameController.ButtonHandler interface.

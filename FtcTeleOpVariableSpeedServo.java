@@ -89,14 +89,17 @@ public class FtcTeleOpVariableSpeedServo extends FtcOpMode
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        //
-        // Arm subsystem.
-        //
-        double armPower = gamepad.getRightStickY(true);
-        arm.setPower(armPower);
-        dashboard.displayPrintf(2, "Arm:power=%.2f,position=%.2f", armPower, arm.getPosition());
-    }   //slowPeriodic
+        if (slowPeriodicLoop)
+        {
+            //
+            // Arm subsystem.
+            //
+            double armPower = gamepad.getRightStickY(true);
+            arm.setPower(armPower);
+            dashboard.displayPrintf(2, "Arm:power=%.2f,position=%.2f", armPower, arm.getPosition());
+        }
+    }   //periodic
 
 }   //class FtcTeleOpVariableSpeedServo

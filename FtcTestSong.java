@@ -170,38 +170,41 @@ public class FtcTestSong extends FtcOpMode
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        State state = sm.checkReadyAndGetState();
-
-        if (state == null)
+        if (slowPeriodicLoop)
         {
-            dashboard.displayPrintf(1, "State: disabled or waiting...");
-        }
-        else
-        {
-            dashboard.displayPrintf(1, "State: %s", state);
+            State state = sm.checkReadyAndGetState();
 
-            switch (state)
+            if (state == null)
             {
-                case PLAY_STARWARS:
-                    songPlayer.playSong(starWars, BAR_DURATION, false, event);
-                    sm.addEvent(event);
-                    sm.waitForEvents(State.PLAY_LESMISERABLES);
-                    break;
+                dashboard.displayPrintf(1, "State: disabled or waiting...");
+            }
+            else
+            {
+                dashboard.displayPrintf(1, "State: %s", state);
 
-                case PLAY_LESMISERABLES:
-                    songPlayer.playSong(lesMiserables, BAR_DURATION, false, event);
-                    sm.addEvent(event);
-                    sm.waitForEvents(State.DONE);
-                    break;
+                switch (state)
+                {
+                    case PLAY_STARWARS:
+                        songPlayer.playSong(starWars, BAR_DURATION, false, event);
+                        sm.addEvent(event);
+                        sm.waitForEvents(State.PLAY_LESMISERABLES);
+                        break;
 
-                case DONE:
-                default:
-                    sm.stop();
-                    break;
+                    case PLAY_LESMISERABLES:
+                        songPlayer.playSong(lesMiserables, BAR_DURATION, false, event);
+                        sm.addEvent(event);
+                        sm.waitForEvents(State.DONE);
+                        break;
+
+                    case DONE:
+                    default:
+                        sm.stop();
+                        break;
+                }
             }
         }
-    }   //slowPeriodic
+    }   //periodic
 
 }   //class FtcTestSong

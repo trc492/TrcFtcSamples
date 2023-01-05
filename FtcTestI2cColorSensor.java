@@ -77,28 +77,31 @@ public class FtcTestI2cColorSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int LABEL_WIDTH = 200;
-        dashboard.displayPrintf(1, LABEL_WIDTH, "FirmwareRev: ", "%x", i2cColorSensor.getFirmwareRevision());
-        dashboard.displayPrintf(2, LABEL_WIDTH, "ManufacturerCode: ", "%x", i2cColorSensor.getManufacturerCode());
-        dashboard.displayPrintf(3, LABEL_WIDTH, "IDCode: ", "%x", i2cColorSensor.getIdCode());
-        TrcSensor.SensorData<Double> data = i2cColorSensor.getColorNumber();
-        //
-        // The data may not be ready yet, check it!
-        //
-        if (data.value != null)
+        if (slowPeriodicLoop)
         {
-            dashboard.displayPrintf(4, LABEL_WIDTH, "ColorNumber: ", "%.0f", i2cColorSensor.getColorNumber().value);
-            dashboard.displayPrintf(5, LABEL_WIDTH, "RedValue: ", "%.0f", i2cColorSensor.getRedValue().value);
-            dashboard.displayPrintf(6, LABEL_WIDTH, "GreenValue: ", "%.0f", i2cColorSensor.getGreenValue().value);
-            dashboard.displayPrintf(7, LABEL_WIDTH, "BlueValue: ", "%.0f", i2cColorSensor.getBlueValue().value);
-            dashboard.displayPrintf(8, LABEL_WIDTH, "WhiteValue: ", "%.0f", i2cColorSensor.getWhiteValue().value);
+            final int LABEL_WIDTH = 200;
+            dashboard.displayPrintf(1, LABEL_WIDTH, "FirmwareRev: ", "%x", i2cColorSensor.getFirmwareRevision());
+            dashboard.displayPrintf(2, LABEL_WIDTH, "ManufacturerCode: ", "%x", i2cColorSensor.getManufacturerCode());
+            dashboard.displayPrintf(3, LABEL_WIDTH, "IDCode: ", "%x", i2cColorSensor.getIdCode());
+            TrcSensor.SensorData<Double> data = i2cColorSensor.getColorNumber();
+            //
+            // The data may not be ready yet, check it!
+            //
+            if (data.value != null)
+            {
+                dashboard.displayPrintf(4, LABEL_WIDTH, "ColorNumber: ", "%.0f", i2cColorSensor.getColorNumber().value);
+                dashboard.displayPrintf(5, LABEL_WIDTH, "RedValue: ", "%.0f", i2cColorSensor.getRedValue().value);
+                dashboard.displayPrintf(6, LABEL_WIDTH, "GreenValue: ", "%.0f", i2cColorSensor.getGreenValue().value);
+                dashboard.displayPrintf(7, LABEL_WIDTH, "BlueValue: ", "%.0f", i2cColorSensor.getBlueValue().value);
+                dashboard.displayPrintf(8, LABEL_WIDTH, "WhiteValue: ", "%.0f", i2cColorSensor.getWhiteValue().value);
+            }
+            dashboard.displayPrintf(9, LABEL_WIDTH, "W/R/G/B: ", "%02x%02x%02x%02x (%d/%d/%d/%d)",
+                                    colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue(),
+                                    colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue());
+            dashboard.displayPrintf(10, LABEL_WIDTH, "Hue: ", "%08x", colorSensor.argb());
         }
-        dashboard.displayPrintf(9, LABEL_WIDTH, "W/R/G/B: ", "%02x%02x%02x%02x (%d/%d/%d/%d)",
-                                colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue(),
-                                colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue());
-        dashboard.displayPrintf(10, LABEL_WIDTH, "Hue: ", "%08x", colorSensor.argb());
-    }   //slowPeriodic
+    }   //periodic
 
 }   //class FtcTestI2cColorSensor

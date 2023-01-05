@@ -105,76 +105,86 @@ public class FtcTestRevHub extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        //
-        // Test I2C IMU.
-        //
-        telemetry.addData("Heading", "Heading: x=%6.1f,y=%6.1f,z=%6.1f",
-                imu.gyro.getXHeading().value, imu.gyro.getYHeading().value, imu.gyro.getZHeading().value);
-        telemetry.addData("TurnRate", "TurnRate: x=%6.1f,y=%6.1f,z=%6.1f",
-                imu.gyro.getXRotationRate().value, imu.gyro.getYRotationRate().value, imu.gyro.getZRotationRate().value);
-        telemetry.addData("ImuAngle", "Angle:x=%6.1f,y=%6.1f,z=%6.1f",
-                imu.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle,
-                imu.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle,
-                imu.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle);
-        telemetry.addData("Accel", "x=%6.1f,y=%6.1f,z=%6.1f",
-                imu.accel.getXAcceleration().value, imu.accel.getYAcceleration().value, imu.accel.getZAcceleration().value);
-        telemetry.addData("Vel", "Vel: x=%6.1f,y=%6.1f,z=%6.1f",
-                imu.accel.getXVelocity().value, imu.accel.getYVelocity().value, imu.accel.getZVelocity().value);
-        telemetry.addData("Dist", "x=%6.1f,y=%6.1f,z=%6.1f",
-                imu.accel.getXDistance().value, imu.accel.getYDistance().value, imu.accel.getZDistance().value);
-        //
-        // Test I2C Color Sensor.
-        //
-        telemetry.addData("ColorRGB", "Color=%x,rgb=%f/%f/%f",
-                colorSensor.getRawData(0, FtcColorSensor.DataType.COLOR_NUMBER).value.intValue(),
-                colorSensor.getRawData(0, FtcColorSensor.DataType.RED).value,
-                colorSensor.getRawData(0, FtcColorSensor.DataType.GREEN).value,
-                colorSensor.getRawData(0, FtcColorSensor.DataType.BLUE).value);
-        telemetry.addData("ColorHSV", "HSV=%f/%f/%f",
-                colorSensor.getRawData(0, FtcColorSensor.DataType.HUE).value,
-                colorSensor.getRawData(0, FtcColorSensor.DataType.SATURATION).value,
-                colorSensor.getRawData(0, FtcColorSensor.DataType.VALUE).value);
-        //
-        // Test DC motors.
-        //
-        double motorPower = gamepad.getRightStickY(true);
-        for (int i = 0; i < motors.length; i++)
+        if (slowPeriodicLoop)
         {
-            motors[i].set(motorPower);
-            telemetry.addData("Motor" + i, "power=%.1f, enc=%d", motorPower, motors[i].getPosition());
-        }
-        //
-        // Test Servos.
-        //
-        double pos = dpadRightPressed? 1.0: 0.0;
-        for (FtcServo servo : servos)
-        {
-            servo.setPosition(pos);
-        }
-        telemetry.addData("Servo", "pos=%.0f", pos);
-        //
-        // Test Analog Inputs.
-        //
-        double data;
-        for (int i = 0; i < analogInputs.length; i++)
-        {
-            data = analogInputs[i].getData(0).value;
-            telemetry.addData("Analog" + i, "volt=%.2f", data);
-        }
-        //
-        // Test Digital Inputs.
-        //
-        boolean state;
-        for (int i = 0; i < digitalInputs.length; i++)
-        {
-            state = digitalInputs[i].isActive();
-            telemetry.addData("Digital" + i, "state=%s", state);
-        }
+            //
+            // Test I2C IMU.
+            //
+            telemetry.addData("Heading", "Heading: x=%6.1f,y=%6.1f,z=%6.1f",
+                              imu.gyro.getXHeading().value, imu.gyro.getYHeading().value, imu.gyro.getZHeading().value);
+            telemetry.addData("TurnRate", "TurnRate: x=%6.1f,y=%6.1f,z=%6.1f",
+                              imu.gyro.getXRotationRate().value, imu.gyro.getYRotationRate().value,
+                              imu.gyro.getZRotationRate().value);
+            telemetry.addData("ImuAngle", "Angle:x=%6.1f,y=%6.1f,z=%6.1f",
+                              imu.imu.getAngularOrientation(
+                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle,
+                              imu.imu.getAngularOrientation(
+                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle,
+                              imu.imu.getAngularOrientation(
+                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle);
+            telemetry.addData("Accel", "x=%6.1f,y=%6.1f,z=%6.1f",
+                              imu.accel.getXAcceleration().value, imu.accel.getYAcceleration().value,
+                              imu.accel.getZAcceleration().value);
+            telemetry.addData("Vel", "Vel: x=%6.1f,y=%6.1f,z=%6.1f",
+                              imu.accel.getXVelocity().value, imu.accel.getYVelocity().value,
+                              imu.accel.getZVelocity().value);
+            telemetry.addData("Dist", "x=%6.1f,y=%6.1f,z=%6.1f",
+                              imu.accel.getXDistance().value, imu.accel.getYDistance().value,
+                              imu.accel.getZDistance().value);
+            //
+            // Test I2C Color Sensor.
+            //
+            telemetry.addData("ColorRGB", "Color=%x,rgb=%f/%f/%f",
+                              colorSensor.getRawData(0, FtcColorSensor.DataType.COLOR_NUMBER).value.intValue(),
+                              colorSensor.getRawData(0, FtcColorSensor.DataType.RED).value,
+                              colorSensor.getRawData(0, FtcColorSensor.DataType.GREEN).value,
+                              colorSensor.getRawData(0, FtcColorSensor.DataType.BLUE).value);
+            telemetry.addData("ColorHSV", "HSV=%f/%f/%f",
+                              colorSensor.getRawData(0, FtcColorSensor.DataType.HUE).value,
+                              colorSensor.getRawData(0, FtcColorSensor.DataType.SATURATION).value,
+                              colorSensor.getRawData(0, FtcColorSensor.DataType.VALUE).value);
+            //
+            // Test DC motors.
+            //
+            double motorPower = gamepad.getRightStickY(true);
+            for (int i = 0; i < motors.length; i++)
+            {
+                motors[i].set(motorPower);
+                telemetry.addData("Motor" + i, "power=%.1f, enc=%d", motorPower, motors[i].getPosition());
+            }
+            //
+            // Test Servos.
+            //
+            double pos = dpadRightPressed ? 1.0 : 0.0;
+            for (FtcServo servo : servos)
+            {
+                servo.setPosition(pos);
+            }
+            telemetry.addData("Servo", "pos=%.0f", pos);
+            //
+            // Test Analog Inputs.
+            //
+            double data;
+            for (int i = 0; i < analogInputs.length; i++)
+            {
+                data = analogInputs[i].getData(0).value;
+                telemetry.addData("Analog" + i, "volt=%.2f", data);
+            }
+            //
+            // Test Digital Inputs.
+            //
+            boolean state;
+            for (int i = 0; i < digitalInputs.length; i++)
+            {
+                state = digitalInputs[i].isActive();
+                telemetry.addData("Digital" + i, "state=%s", state);
+            }
 
-        telemetry.update();
-    }   //slowPeriodic
+            telemetry.update();
+        }
+    }   //periodic
 
     private void buttonEvent(TrcGameController gameCtrl, int button, boolean pressed)
     {

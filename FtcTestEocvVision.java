@@ -125,29 +125,33 @@ public class FtcTestEocvVision extends FtcOpMode
     }   //stopMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        final int maxNumLines = 5;
-        int lineIndex = 1;
-        int endLine = lineIndex + maxNumLines;
-        int numTargets;
-        TrcVisionTargetInfo<?>[] targetsInfo = eocvVision.getDetectedTargetsInfo(null, null, 0.0, CAMERA_HEIGHT_OFFSET);
-
-        if (targetsInfo != null)
+        if (slowPeriodicLoop)
         {
-            numTargets = Math.min(targetsInfo.length, maxNumLines);
-            for (int i = 0; i < numTargets; i++)
+            final int maxNumLines = 5;
+            int lineIndex = 1;
+            int endLine = lineIndex + maxNumLines;
+            int numTargets;
+            TrcVisionTargetInfo<?>[] targetsInfo =
+                eocvVision.getDetectedTargetsInfo(null, null, 0.0, CAMERA_HEIGHT_OFFSET);
+
+            if (targetsInfo != null)
             {
-                dashboard.displayPrintf(lineIndex, "[%d] %s", i, targetsInfo[i]);
+                numTargets = Math.min(targetsInfo.length, maxNumLines);
+                for (int i = 0; i < numTargets; i++)
+                {
+                    dashboard.displayPrintf(lineIndex, "[%d] %s", i, targetsInfo[i]);
+                    lineIndex++;
+                }
+            }
+
+            while (lineIndex < endLine)
+            {
+                dashboard.displayPrintf(lineIndex, "");
                 lineIndex++;
             }
         }
-
-        while (lineIndex < endLine)
-        {
-            dashboard.displayPrintf(lineIndex, "");
-            lineIndex++;
-        }
-    }   //slowPeriodic
+    }   //periodic
 
 }   //class FtcTestEocvVision

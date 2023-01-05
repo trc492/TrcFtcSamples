@@ -69,20 +69,25 @@ public class FtcTestRevColorSensor extends FtcOpMode
     }   //startMode
 
     @Override
-    public void slowPeriodic(double elapsedTime)
+    public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        dashboard.displayPrintf(1, "argb=%d/%d/%d/%d",
-                colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue());
-        int argb = colorSensor.argb();
-        dashboard.displayPrintf(2, "colorInt=%d/%d/%d/%d",
-                (argb >> 24) & 0xff, (argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff);
-        NormalizedRGBA normalizedRGBA = ((NormalizedColorSensor)colorSensor).getNormalizedColors();
-        dashboard.displayPrintf(3, "Normalized Color=%f/%f/%f/%f",
-                normalizedRGBA.alpha, normalizedRGBA.red, normalizedRGBA.blue, normalizedRGBA.green);
-        int normalizedColorInt = normalizedRGBA.toColor();
-        dashboard.displayPrintf(4, "Normalized ColorInt=%d/%d/%d/%d",
-                Color.alpha(normalizedColorInt), Color.red(normalizedColorInt), Color.green(normalizedColorInt),
-                Color.blue(normalizedColorInt));
-    }   //slowPeriodic
+        if (slowPeriodicLoop)
+        {
+            dashboard.displayPrintf(1, "argb=%d/%d/%d/%d",
+                                    colorSensor.alpha(), colorSensor.red(), colorSensor.green(), colorSensor.blue());
+            int argb = colorSensor.argb();
+            dashboard.displayPrintf(2, "colorInt=%d/%d/%d/%d",
+                                    (argb >> 24) & 0xff, (argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff);
+            NormalizedRGBA normalizedRGBA = ((NormalizedColorSensor) colorSensor).getNormalizedColors();
+            dashboard.displayPrintf(3, "Normalized Color=%f/%f/%f/%f",
+                                    normalizedRGBA.alpha, normalizedRGBA.red, normalizedRGBA.blue,
+                                    normalizedRGBA.green);
+            int normalizedColorInt = normalizedRGBA.toColor();
+            dashboard.displayPrintf(4, "Normalized ColorInt=%d/%d/%d/%d",
+                                    Color.alpha(normalizedColorInt), Color.red(normalizedColorInt),
+                                    Color.green(normalizedColorInt),
+                                    Color.blue(normalizedColorInt));
+        }
+    }   //periodic
 
 }   //class FtcTestRevColorSensor
