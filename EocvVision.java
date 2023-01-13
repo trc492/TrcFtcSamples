@@ -54,7 +54,7 @@ public class EocvVision extends FtcEocvDetector
 
     public enum ObjectType
     {
-        APRIL_TAG, RED_BLOB, BLUE_BLOB, YELLOW_BLOB;
+        APRIL_TAG, RED_BLOB, BLUE_BLOB, YELLOW_BLOB, NONE;
 
         static ObjectType nextObjectType(ObjectType objType)
         {
@@ -74,8 +74,12 @@ public class EocvVision extends FtcEocvDetector
                     nextObjType = YELLOW_BLOB;
                     break;
 
-                default:
                 case YELLOW_BLOB:
+                    nextObjType = NONE;
+                    break;
+
+                default:
+                case NONE:
                     nextObjType = APRIL_TAG;
                     break;
             }
@@ -109,7 +113,7 @@ public class EocvVision extends FtcEocvDetector
         TrcHomographyMapper.Rectangle cameraRect, TrcHomographyMapper.Rectangle worldRect,
         OpenCvCamera openCvCam, OpenCvCameraRotation cameraRotation, TrcDbgTrace tracer)
     {
-        super(instanceName, openCvCam, imageWidth, imageHeight, cameraRotation, cameraRect, worldRect, tracer);
+        super(instanceName, imageWidth, imageHeight, cameraRect, worldRect, openCvCam, cameraRotation, tracer);
 
         this.tracer = tracer;
         TrcOpenCvColorBlobPipeline.FilterContourParams redBlobFilterContourParams =
@@ -142,12 +146,16 @@ public class EocvVision extends FtcEocvDetector
 
         aprilTagPipeline = new FtcEocvAprilTagPipeline(
             AprilTagDetectorJNI.TagFamily.TAG_36h11, APRILTAG_SIZE, CAMERA_FX, CAMERA_FY, CAMERA_CX, CAMERA_CY, tracer);
+        aprilTagPipeline.setVideoOutput(0, true);
         redBlobPipeline = new FtcEocvColorBlobPipeline(
             "redBlobPipeline", colorConversion, colorThresholdsRedBlob, redBlobFilterContourParams, tracer);
+        redBlobPipeline.setVideoOutput(0, true);
         blueBlobPipeline = new FtcEocvColorBlobPipeline(
             "blueBlobPipeline", colorConversion, colorThresholdsBlueBlob, blueBlobFilterContourParams, tracer);
+        blueBlobPipeline.setVideoOutput(0, true);
         yellowBlobPipeline = new FtcEocvColorBlobPipeline(
             "yellowBlobPipeliine", colorConversion, colorThresholdsYellowBlob, yellowBlobFilterContourParams, tracer);
+        yellowBlobPipeline.setVideoOutput(0, true);
         // Set default pipeline and enable it.
         setDetectObjectType(ObjectType.APRIL_TAG);
     }   //EocvVision
@@ -178,6 +186,10 @@ public class EocvVision extends FtcEocvDetector
 
             case YELLOW_BLOB:
                 setPipeline(yellowBlobPipeline);
+                break;
+
+            case NONE:
+                setPipeline(null);
                 break;
         }
     }   //updatePipeline
@@ -212,18 +224,11 @@ public class EocvVision extends FtcEocvDetector
     }   //getDetectObjectType
 
     /**
-     * This method toggles the colorblob pipeline to display either the annotated input or the color filter output.
-     * This is mainly for debugging the color filtering of the pipeline so one can see what the color filtering output
-     * looks like.
+     * This method cycles to the next intermediate mat of the pipeline as the video output mat.
      */
-    public void toggleColorFilterOutput()
+    public void setNextVideoOutput()
     {
-        TrcOpenCvPipeline<?> pipeline = getPipeline();
-
-        if (pipeline == redBlobPipeline || pipeline == blueBlobPipeline || pipeline == yellowBlobPipeline)
-        {
-            ((FtcEocvColorBlobPipeline) pipeline).toggleColorFilterOutput();
-        }
-    }   //toggleColorFilterOutput
+        getPipeline().setNextVideoOutput(true);
+    }   //setNextVideoOutput
 
 }   //class EocvVision

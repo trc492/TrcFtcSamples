@@ -115,13 +115,13 @@ public class FtcTestEocvVision extends FtcOpMode
     public void startMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
     {
         dashboard.clearDisplay();
-        eocvVision.setEnabled(true);
+        eocvVision.setDetectObjectType(EocvVision.ObjectType.APRIL_TAG);
     }   //startMode
 
     @Override
     public void stopMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
     {
-        eocvVision.setEnabled(false);
+        eocvVision.setDetectObjectType(EocvVision.ObjectType.NONE);
     }   //stopMode
 
     @Override
