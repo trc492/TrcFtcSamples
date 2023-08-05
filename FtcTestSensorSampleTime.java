@@ -65,10 +65,10 @@ public class FtcTestSensorSampleTime extends FtcOpMode
         rfWheel = new FtcDcMotor("rfWheel");
         lbWheel = new FtcDcMotor("lbWheel");
         rbWheel = new FtcDcMotor("rbWheel");
-        lfWheel.setInverted(LEFTWHEEL_INVERTED);
-        lbWheel.setInverted(LEFTWHEEL_INVERTED);
-        rfWheel.setInverted(RIGHTWHEEL_INVERTED);
-        rbWheel.setInverted(RIGHTWHEEL_INVERTED);
+        lfWheel.setMotorInverted(LEFTWHEEL_INVERTED);
+        lbWheel.setMotorInverted(LEFTWHEEL_INVERTED);
+        rfWheel.setMotorInverted(RIGHTWHEEL_INVERTED);
+        rbWheel.setMotorInverted(RIGHTWHEEL_INVERTED);
 
         lfWheel.resetPosition();
         rfWheel.resetPosition();

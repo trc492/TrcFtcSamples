@@ -69,7 +69,7 @@ public class FtcTeleOpGrabber extends FtcOpMode implements TrcGameController.But
 
         FtcServo leftServo = new FtcServo("grabberLeftServo");
         FtcServo rightServo = new FtcServo("grabberRightServo");
-        grabber = new TrcServoGrabber("grabber", leftServo, rightServo, grabberParams, null);
+        grabber = new TrcServoGrabber("grabber", leftServo, rightServo, grabberParams, null, null);
         //
         // Initializing gamepads.
         //

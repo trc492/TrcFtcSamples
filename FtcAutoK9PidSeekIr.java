@@ -107,7 +107,7 @@ public class FtcAutoK9PidSeekIr extends FtcOpMode
                     //
                     // Go towards IR beacon until IR strength reaches 0.8.
                     //
-                    robot.pidSeekIr.setSensorTarget(0.0, 0.8, 0.0, event);
+                    robot.irPidDrive.setSensorTarget(0.0, 0.8, 0.0, event);
                     sm.waitForSingleEvent(event, State.DONE);
                     break;
 
@@ -120,8 +120,8 @@ public class FtcAutoK9PidSeekIr extends FtcOpMode
                     break;
             }
 
-            robot.irDrivePidCtrl.displayPidInfo(8);
-            robot.irTurnPidCtrl.displayPidInfo(10);
+            robot.irPidDrive.getYPidCtrl().displayPidInfo(8);
+            robot.irPidDrive.getTurnPidCtrl().displayPidInfo(10);
         }
     }   //periodic
 

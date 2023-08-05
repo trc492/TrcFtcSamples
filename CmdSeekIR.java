@@ -86,14 +86,9 @@ public class CmdSeekIR implements TrcRobot.RobotCommand
     @Override
     public void cancel()
     {
-        if (robot.pidDrive.isActive())
+        if (robot.irPidDrive.isActive())
         {
-            robot.pidDrive.cancel();
-        }
-
-        if (robot.pidLineFollow.isActive())
-        {
-            robot.pidLineFollow.cancel();
+            robot.irPidDrive.cancel();
         }
 
         sm.stop();
@@ -142,7 +137,7 @@ public class CmdSeekIR implements TrcRobot.RobotCommand
                     //
                     // Go towards IR beacon until IR strength reaches 0.8.
                     //
-                    robot.pidSeekIr.setSensorTarget(0.0, 0.8, 0.0, event);
+                    robot.irPidDrive.setSensorTarget(0.0, 0.8, 0.0, event);
                     sm.waitForSingleEvent(event, State.DONE);
                     break;
 

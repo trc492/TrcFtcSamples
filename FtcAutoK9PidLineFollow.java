@@ -110,9 +110,9 @@ public class FtcAutoK9PidLineFollow extends FtcOpMode
                     // Go forward slowly for 3 ft to find the line.
                     // If line is detected, PID drive will be interrupted.
                     //
-                    robot.colorTrigger.setEnabled(true);
+                    robot.setColorTriggerEnabled(true);
                     // Drive slowly, limit to half power.
-                    robot.encoderYPidCtrl.setOutputLimit(0.5);
+                    robot.pidDrive.getYPidCtrl().setOutputLimit(0.5);
                     robot.pidDrive.setRelativeYTarget(36.0, event);
                     sm.waitForSingleEvent(event, State.TURN_TO_LINE);
                     break;
@@ -123,7 +123,7 @@ public class FtcAutoK9PidLineFollow extends FtcOpMode
                     // slowly to find the edge of the line. If the line is detected,
                     // PID turn will be interrupted.
                     //
-                    robot.gyroPidCtrl.setOutputLimit(0.5);
+                    robot.pidDrive.getTurnPidCtrl().setOutputLimit(0.5);
                     robot.pidDrive.setRelativeTurnTarget(90.0, event);
                     sm.waitForSingleEvent(event, State.FOLLOW_LINE);
                     break;
@@ -132,14 +132,14 @@ public class FtcAutoK9PidLineFollow extends FtcOpMode
                     //
                     // Slowly follow the line for 5 ft.
                     //
-                    robot.colorTrigger.setEnabled(false);
-                    robot.encoderYPidCtrl.setOutputLimit(0.3);
-                    robot.colorPidCtrl.setOutputLimit(0.3);
+                    robot.setColorTriggerEnabled(false);
+                    robot.colorPidLineFollow.getYPidCtrl().setOutputLimit(0.3);
+                    robot.colorPidLineFollow.getTurnPidCtrl().setOutputLimit(0.3);
                     //
                     // Follow right edge if red alliance.
                     // Follow left edge if blue alliance.
                     //
-                    robot.lineFollowDrive.setSensorTarget(
+                    robot.colorPidLineFollow.setSensorTarget(
                             0.0, 60.0, K9Robot.LIGHT_THRESHOLD, event);
                     sm.waitForSingleEvent(event, State.DONE);
                     break;
@@ -149,16 +149,13 @@ public class FtcAutoK9PidLineFollow extends FtcOpMode
                     //
                     // We are done, restore everything and stop!
                     //
-                    robot.encoderYPidCtrl.setOutputLimit(1.0);
-                    robot.gyroPidCtrl.setOutputLimit(1.0);
-                    robot.lightPidCtrl.setOutputLimit(1.0);
+                    robot.pidDrive.getYPidCtrl().setOutputLimit(1.0);
+                    robot.pidDrive.getTurnPidCtrl().setOutputLimit(1.0);
+                    robot.colorPidLineFollow.getYPidCtrl().setOutputLimit(1.0);
+                    robot.colorPidLineFollow.getTurnPidCtrl().setOutputLimit(1.0);
                     sm.stop();
                     break;
             }
-
-            robot.encoderYPidCtrl.displayPidInfo(8);
-            robot.gyroPidCtrl.displayPidInfo(10);
-            robot.lightPidCtrl.displayPidInfo(12);
         }
     }   //periodic
 

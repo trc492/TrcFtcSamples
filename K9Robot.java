@@ -22,17 +22,18 @@
 
 package TrcFtcSamples;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 
-import TrcCommonLib.trclib.TrcAnalogSensorTrigger;
 import TrcCommonLib.trclib.TrcDbgTrace;
 import TrcCommonLib.trclib.TrcGyro;
 import TrcCommonLib.trclib.TrcPidController;
 import TrcCommonLib.trclib.TrcPidDrive;
 import TrcCommonLib.trclib.TrcSimpleDriveBase;
-import TrcFtcLib.ftclib.FtcBNO055Imu;
+import TrcCommonLib.trclib.TrcTriggerThresholdZones;
 import TrcFtcLib.ftclib.FtcDashboard;
 import TrcFtcLib.ftclib.FtcDcMotor;
+import TrcFtcLib.ftclib.FtcImu;
 import TrcFtcLib.ftclib.FtcMRColorSensor;
 import TrcFtcLib.ftclib.FtcOpMode;
 import TrcFtcLib.ftclib.FtcOpticalDistanceSensor;
@@ -43,31 +44,28 @@ import TrcFtcLib.ftclib.FtcServo;
  */
 public class K9Robot
 {
-    static final String moduleName = "K9Robot";
+    private static final String moduleName = "K9Robot";
     //
     // NOTE: The following constants must be tuned/updated for your robot in order for it to work properly.
     //
     // PID drive constants.
     //
-    static final TrcPidController.PidParameters drivePidParams = new TrcPidController.PidParameters(
-        new TrcPidController.PidCoefficients(0.03, 0.0, 0.0), 1.0);
-    static final double DRIVE_INCHES_PER_COUNT  = (104.0/7416.5);
-    //
-    // PID turn constants.
-    //
-    static final TrcPidController.PidParameters turnPidParams = new TrcPidController.PidParameters(
-        new TrcPidController.PidCoefficients(0.05, 0.0, 0.0), 1.0);
+    private static final double DRIVE_INCHES_PER_COUNT = (104.0/7416.5);
     //
     // Velocity PID constants.
     //
-    static final double DRIVE_MAX_VELOCITY = 25.0;  // in./sec
-    final TrcPidController.PidCoefficients velPidCoeff = new TrcPidController.PidCoefficients(
+    private static final double DRIVE_MAX_VELOCITY = 25.0;  // in./sec
+    public final TrcPidController.PidCoefficients yEncPidCoeff = new TrcPidController.PidCoefficients(0.03, 0.0, 0.0);
+    public final TrcPidController.PidCoefficients gyroPidCoeff = new TrcPidController.PidCoefficients(0.05, 0.0, 0.0);
+    public final TrcPidController.PidCoefficients colorPidCoeff = new TrcPidController.PidCoefficients(0.1, 0.0, 0.0);
+    public final TrcPidController.PidCoefficients lightPidCoeff = new TrcPidController.PidCoefficients(0.02, 0.0, 0.0);
+    public final TrcPidController.PidCoefficients irDrivePidCoeff = new TrcPidController.PidCoefficients(0.8, 0.0, 0.0);
+    public final TrcPidController.PidCoefficients irTurnPidCoeff = new TrcPidController.PidCoefficients(0.1, 0.0, 0.0);
+    public final TrcPidController.PidCoefficients velPidCoeff = new TrcPidController.PidCoefficients(
         0.0, 0.0, 0.0, 1/DRIVE_MAX_VELOCITY);
     //
     // PID line follow constants.
     //
-    static final TrcPidController.PidParameters colorPidParams = new TrcPidController.PidParameters(
-        new TrcPidController.PidCoefficients(0.1, 0.0, 0.0), 2.0);
     static final double COLOR_BLACK = 0.0;
     static final double COLOR_BLUE = 3.0;
     static final double COLOR_RED = 10.0;
@@ -79,22 +77,9 @@ public class K9Robot
     //
     // PID line follow constants.
     //
-    static final TrcPidController.PidParameters lightPidParams = new TrcPidController.PidParameters(
-        new TrcPidController.PidCoefficients(0.02, 0.0, 0.0), 5.0);
-
     static final double LIGHT_DARK_LEVEL = 10.0;
     static final double LIGHT_WHITE_LEVEL = 60.0;
     static final double LIGHT_THRESHOLD = ((LIGHT_DARK_LEVEL + LIGHT_WHITE_LEVEL)/2.0);
-    //
-    // PID IR drive constants.
-    //
-    static final TrcPidController.PidParameters irDrivePidParams = new TrcPidController.PidParameters(
-        new TrcPidController.PidCoefficients(0.8, 0.0, 0.0), 0.1);
-    //
-    // PID IR turn constants.
-    //
-    static final TrcPidController.PidParameters irTurnPidParams = new TrcPidController.PidParameters(
-        new TrcPidController.PidCoefficients(0.1, 0.0, 0.0), 1.0);
     //
     // Subsystems.
     //
@@ -112,7 +97,6 @@ public class K9Robot
     //
     // Sensors.
     //
-    public FtcBNO055Imu imu;
     public TrcGyro gyro;
     public FtcMRColorSensor colorSensor;
     public FtcOpticalDistanceSensor lightSensor;
@@ -128,28 +112,12 @@ public class K9Robot
     //
     // PID drive.
     //
-    public TrcPidController encoderYPidCtrl;
-    public TrcPidController gyroPidCtrl;
     public TrcPidDrive pidDrive;
-//    public TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients();
-    //
-    // PID line follow using color sensor.
-    //
-    public TrcPidController colorPidCtrl;
-    public TrcPidDrive pidLineFollow;
-    public TrcAnalogSensorTrigger<FtcMRColorSensor.DataType> colorTrigger;
-    //
-    // PID line follow using Optical Distance sensor.
-    //
-    public TrcPidController lightPidCtrl;
-    public TrcPidDrive lineFollowDrive;
-    public TrcAnalogSensorTrigger<FtcOpticalDistanceSensor.DataType> lightTrigger;
-    //
-    // PID seek IR.
-    //
-    public TrcPidController irDrivePidCtrl;
-    public TrcPidController irTurnPidCtrl;
-    public TrcPidDrive pidSeekIr;
+    public TrcPidDrive colorPidLineFollow;
+    public TrcPidDrive lightPidLineFollow;
+    public TrcPidDrive irPidDrive;
+    public TrcTriggerThresholdZones colorTrigger;
+    public TrcTriggerThresholdZones lightTrigger;
     //
     // Other subsystems.
     //
@@ -168,8 +136,9 @@ public class K9Robot
         //
         // Initialize sensors.
         //
-        imu = new FtcBNO055Imu("imu");
-        gyro = imu.gyro;
+        gyro = new FtcImu(
+            "imu", RevHubOrientationOnRobot.LogoFacingDirection.UP,
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
 
         colorSensor = new FtcMRColorSensor("colorSensor");
         lightSensor = new FtcOpticalDistanceSensor("light_sensor");
@@ -179,51 +148,57 @@ public class K9Robot
         //
         motorLeft = new FtcDcMotor("left_wheel");
         motorRight = new FtcDcMotor("right_wheel");
-        motorLeft.setInverted(true);
-        motorRight.setInverted(false);
+        motorLeft.setMotorInverted(true);
+        motorRight.setMotorInverted(false);
 
         driveBase = new TrcSimpleDriveBase(motorLeft, motorRight, gyro);
         driveBase.setOdometryScales(DRIVE_INCHES_PER_COUNT);
         //
-        // PID drive.
+        // PID drives.
         //
-        encoderYPidCtrl = new TrcPidController("encoderYPid", drivePidParams, driveBase::getYPosition);
-        gyroPidCtrl = new TrcPidController("gyroPid", turnPidParams, driveBase::getHeading);
-        gyroPidCtrl.setAbsoluteSetPoint(true);
-        pidDrive = new TrcPidDrive("pidDrive", driveBase, null, encoderYPidCtrl, gyroPidCtrl);
+
+        TrcPidController.PidParameters yEncPidParams = new TrcPidController.PidParameters(
+            yEncPidCoeff, 1.0, driveBase::getYPosition);
+        TrcPidController.PidParameters gyroPidParams = new TrcPidController.PidParameters(
+            gyroPidCoeff, 1.0, driveBase::getHeading);
+        TrcPidController.PidParameters colorPidParams = new TrcPidController.PidParameters(
+            colorPidCoeff, 2.0, this::getColorValue);
+        TrcPidController.PidParameters lightPidParams = new TrcPidController.PidParameters(
+            lightPidCoeff, 5.0, lightSensor.sensor::getRawLightDetected);
+        TrcPidController.PidParameters irDrivePidParams = new TrcPidController.PidParameters(
+            irDrivePidCoeff, 0.1, this::getIrStrength);
+        TrcPidController.PidParameters irTurnPidParams = new TrcPidController.PidParameters(
+            irTurnPidCoeff, 1.0, this::getIrAngle);
+
+        pidDrive = new TrcPidDrive("pidDrive", driveBase, null, yEncPidParams, gyroPidParams);
+        pidDrive.getTurnPidCtrl().setAbsoluteSetPoint(true);
         //
         // PID line follow using color sensor.
         //
-        colorPidCtrl = new TrcPidController("colorPid", colorPidParams, this::getColorValue);
-        colorPidCtrl.setAbsoluteSetPoint(true);
-        pidLineFollow = new TrcPidDrive("colorLineFollow", driveBase, null, encoderYPidCtrl, colorPidCtrl);
+        colorPidLineFollow = new TrcPidDrive("colorPidLineFollow", driveBase, null, yEncPidParams, colorPidParams);
+        colorPidLineFollow.getTurnPidCtrl().setAbsoluteSetPoint(true);
         // In order to line follow, we need to first find the line. We will first use pidDrive to keep the robot
         // moving forward for a set distance. Then colorTrigger will interrupt pidDrive once the line is detected.
         // Then we can use pidLineFollow to follow the line.
-        colorTrigger = new TrcAnalogSensorTrigger<>(
-                "colorTrigger", colorSensor, 0, FtcMRColorSensor.DataType.WHITE,
-                new double[]{COLOR_BLACK, COLOR_WHITE}, true, this::triggerEvent);
+        colorTrigger = new TrcTriggerThresholdZones(
+            "colorTrigger", this::getColorValue, new double[]{COLOR_BLACK, COLOR_WHITE}, true);
         //
         // PID line follow using Optical Distance sensor.
         //
-        lightPidCtrl = new TrcPidController("lightPid", lightPidParams, lightSensor.sensor::getRawLightDetected);
-        lightPidCtrl.setAbsoluteSetPoint(true);
-        lineFollowDrive = new TrcPidDrive(
-                "lightLineFollow", driveBase, null, encoderYPidCtrl, lightPidCtrl);
+        lightPidLineFollow = new TrcPidDrive("lightPidLineFollow", driveBase, null, yEncPidParams, lightPidParams);
+        lightPidLineFollow.getTurnPidCtrl().setAbsoluteSetPoint(true);
         // In order to line follow, we need to first find the line. We will first use pidDrive to keep the robot
         // moving forward for a set distance. Then lightTrigger will interrupt pidDrive once the line is detected.
         // Then we can use lineFollowDrive to follow the line.
-        lightTrigger = new TrcAnalogSensorTrigger<>(
-                "lightTrigger", lightSensor, 0, FtcOpticalDistanceSensor.DataType.RAW_LIGHT_DETECTED,
-                new double[]{LIGHT_DARK_LEVEL, LIGHT_WHITE_LEVEL}, true, this::triggerEvent);
+        lightTrigger = new TrcTriggerThresholdZones(
+            "lightTrigger", lightSensor.sensor::getRawLightDetected, new double[]{LIGHT_DARK_LEVEL, LIGHT_WHITE_LEVEL},
+            true);
         //
         // PID IR seeking.
         //
-        irDrivePidCtrl = new TrcPidController("irDrivePid", irDrivePidParams, this::getIrStrength);
-        irDrivePidCtrl.setAbsoluteSetPoint(true);
-        irTurnPidCtrl = new TrcPidController("irTurnPid", irTurnPidParams, this::getIrAngle);
-        irDrivePidCtrl.setAbsoluteSetPoint(true);
-        pidSeekIr = new TrcPidDrive("seekIr", driveBase, null, irDrivePidCtrl, irTurnPidCtrl);
+        irPidDrive = new TrcPidDrive("irPidDrive", driveBase, null, irDrivePidParams, irTurnPidParams);
+        irPidDrive.getYPidCtrl().setAbsoluteSetPoint(true);
+        irPidDrive.getTurnPidCtrl().setAbsoluteSetPoint(true);
         //
         // Arm subsystem.
         //
@@ -261,19 +236,66 @@ public class K9Robot
     }   //stopMode
 
     /**
+     * This method enables/disable color sensor trigger for line following using color sensor.
+     *
+     * @param enabled specifies true to enable, false to disable.
+     */
+    void setColorTriggerEnabled(boolean enabled)
+    {
+        if (enabled)
+        {
+            colorTrigger.enableTrigger(this::colorTriggerEvent);
+        }
+        else
+        {
+            colorTrigger.disableTrigger();
+        }
+    }   //setColorTriggerEnabled
+
+    /**
+     * This method enables/disable light sensor trigger for line following using light sensor.
+     *
+     * @param enabled specifies true to enable, false to disable.
+     */
+    void setLightTriggerEnabled(boolean enabled)
+    {
+        if (enabled)
+        {
+            lightTrigger.enableTrigger(this::lightTriggerEvent);
+        }
+        else
+        {
+            lightTrigger.disableTrigger();
+        }
+    }   //setLightTriggerEnabled
+
+    /**
      * This method is called when a threshold has been crossed.
      *
      * @param context specifies the callback context.
      */
-    private void triggerEvent(Object context)
-//        int currZone, int prevZone, double zoneValue)
+    private void colorTriggerEvent(Object context)
     {
-        TrcAnalogSensorTrigger.CallbackContext callbackContext = (TrcAnalogSensorTrigger.CallbackContext) context;
+        TrcTriggerThresholdZones.CallbackContext callbackContext = (TrcTriggerThresholdZones.CallbackContext) context;
         if (pidDrive.isActive() && callbackContext.currZone > 0)
         {
-            pidDrive.cancel();
+            colorPidLineFollow.cancel();
         }
-    }   //triggerEvent
+    }   //colorTriggerEvent
+
+    /**
+     * This method is called when a threshold has been crossed.
+     *
+     * @param context specifies the callback context.
+     */
+    private void lightTriggerEvent(Object context)
+    {
+        TrcTriggerThresholdZones.CallbackContext callbackContext = (TrcTriggerThresholdZones.CallbackContext) context;
+        if (pidDrive.isActive() && callbackContext.currZone > 0)
+        {
+            lightPidLineFollow.cancel();
+        }
+    }   //lightTriggerEvent
 
     /**
      * This method reads and returns the color sensor value.

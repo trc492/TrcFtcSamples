@@ -89,9 +89,9 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
             ELEVATOR_HAS_UPPER_LIMIT_SWITCH, ELEVATOR_UPPER_LIMIT_SWITCH_INVERTED);
         final TrcPidActuator.Parameters elevatorParams = new TrcPidActuator.Parameters()
                 .setPosRange(ELEVATOR_MIN_HEIGHT, ELEVATOR_MAX_HEIGHT)
-                .setScaleOffset(ELEVATOR_INCHES_PER_COUNT, ELEVATOR_OFFSET)
+                .setScaleAndOffset(ELEVATOR_INCHES_PER_COUNT, ELEVATOR_OFFSET)
                 .setPidParams(new TrcPidController.PidParameters(
-                    ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_TOLERANCE))
+                    ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_TOLERANCE, this::getElevatorPosition))
                 .setZeroCalibratePower(ELEVATOR_CAL_POWER)
                 .setStallProtectionParams(
                     ELEVATOR_STALL_MIN_POWER, ELEVATOR_STALL_TOLERANCE, ELEVATOR_STALL_TIMEOUT, ELEVATOR_RESET_TIMEOUT);
@@ -171,5 +171,15 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
             }
         }
     }   //buttonEvent
+
+    /**
+     * This method is called by the PID controller to get the position of the elevator.
+     *
+     * @return elevator position.
+     */
+    double getElevatorPosition()
+    {
+        return elevator.getPosition();
+    }   //getElevatorPosition
 
 }   //class FtcTeleOpPidElevator

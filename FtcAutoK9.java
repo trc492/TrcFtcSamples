@@ -110,9 +110,7 @@ public class FtcAutoK9 extends FtcOpMode
 
             case PURE_PURSUIT_DRIVE:
                 autoCommand = new CmdPurePursuitDrive(
-                    robot.driveBase, null,
-                    robot.encoderYPidCtrl.getPidCoefficients(), robot.gyroPidCtrl.getPidCoefficients(),
-                    robot.velPidCoeff);
+                    robot.driveBase, null, robot.yEncPidCoeff, robot.gyroPidCoeff, robot.velPidCoeff);
                 break;
 
             case FOLLOW_LINE:

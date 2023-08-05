@@ -138,15 +138,15 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
         FtcDcMotor lbMotor = new FtcDcMotor("lbWheel");
         FtcDcMotor rbMotor = new FtcDcMotor("rbWheel");
 
-        lfMotor.setInverted(LEFTWHEEL_INVERTED);
-        rfMotor.setInverted(RIGHTWHEEL_INVERTED);
+        lfMotor.setMotorInverted(LEFTWHEEL_INVERTED);
+        rfMotor.setMotorInverted(RIGHTWHEEL_INVERTED);
         if (SIX_WHEELS)
         {
-            lcMotor.setInverted(LEFTWHEEL_INVERTED);
-            rcMotor.setInverted(RIGHTWHEEL_INVERTED);
+            lcMotor.setMotorInverted(LEFTWHEEL_INVERTED);
+            rcMotor.setMotorInverted(RIGHTWHEEL_INVERTED);
         }
-        lbMotor.setInverted(LEFTWHEEL_INVERTED);
-        rbMotor.setInverted(RIGHTWHEEL_INVERTED);
+        lbMotor.setMotorInverted(LEFTWHEEL_INVERTED);
+        rbMotor.setMotorInverted(RIGHTWHEEL_INVERTED);
         //
         // 6V motors are too fast when driven with 12V so we need to use coast mode or the Thumper will tip forward
         // when stopping.

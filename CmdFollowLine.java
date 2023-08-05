@@ -97,9 +97,9 @@ public class CmdFollowLine implements TrcRobot.RobotCommand
             robot.pidDrive.cancel();
         }
 
-        if (robot.pidLineFollow.isActive())
+        if (robot.colorPidLineFollow.isActive())
         {
-            robot.pidLineFollow.cancel();
+            robot.colorPidLineFollow.cancel();
         }
 
         sm.stop();
@@ -149,9 +149,9 @@ public class CmdFollowLine implements TrcRobot.RobotCommand
                     // Go forward slowly for 3 ft to find the line.
                     // If line is detected, PID drive will be interrupted.
                     //
-                    robot.colorTrigger.setEnabled(true);
+                    robot.setColorTriggerEnabled(true);
                     // Drive slowly, limit to half power.
-                    robot.encoderYPidCtrl.setOutputLimit(0.5);
+                    robot.pidDrive.getYPidCtrl().setOutputLimit(0.5);
                     robot.pidDrive.setRelativeYTarget(36.0, event);
                     sm.waitForSingleEvent(event, State.TURN_TO_LINE);
                     break;
@@ -162,7 +162,7 @@ public class CmdFollowLine implements TrcRobot.RobotCommand
                     // slowly to find the edge of the line. If the line is detected,
                     // PID turn will be interrupted.
                     //
-                    robot.gyroPidCtrl.setOutputLimit(0.5);
+                    robot.pidDrive.getTurnPidCtrl().setOutputLimit(0.5);
                     robot.pidDrive.setRelativeTurnTarget(
                             alliance == FtcAutoK9.Alliance.RED_ALLIANCE? -90.0: 90.0, event);
                     sm.waitForSingleEvent(event, State.FOLLOW_LINE);
@@ -172,16 +172,15 @@ public class CmdFollowLine implements TrcRobot.RobotCommand
                     //
                     // Slowly follow the line for 5 ft.
                     //
-                    robot.colorTrigger.setEnabled(false);
-                    robot.encoderYPidCtrl.setOutputLimit(0.3);
-                    robot.colorPidCtrl.setOutputLimit(0.3);
+                    robot.setColorTriggerEnabled(false);
+                    robot.colorPidLineFollow.getYPidCtrl().setOutputLimit(0.3);
+                    robot.colorPidLineFollow.getTurnPidCtrl().setOutputLimit(0.3);
                     //
                     // Follow right edge if red alliance.
                     // Follow left edge if blue alliance.
                     //
-                    robot.colorPidCtrl.setInverted(alliance == FtcAutoK9.Alliance.RED_ALLIANCE);
-                    robot.pidLineFollow.setSensorTarget(
-                            0.0, 60.0, K9Robot.COLOR_LINE_EDGE_DEADBAND, event);
+                    robot.colorPidLineFollow.getTurnPidCtrl().setInverted(alliance == FtcAutoK9.Alliance.RED_ALLIANCE);
+                    robot.colorPidLineFollow.setSensorTarget(0.0, 60.0, K9Robot.COLOR_LINE_EDGE_DEADBAND, event);
                     sm.waitForSingleEvent(event, State.DONE);
                     break;
 

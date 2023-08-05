@@ -22,21 +22,19 @@
 
 package TrcFtcSamples;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
 import TrcCommonLib.trclib.TrcGameController;
+import TrcCommonLib.trclib.TrcGyro;
 import TrcCommonLib.trclib.TrcRobot;
 import TrcFtcLib.ftclib.FtcAnalogInput;
-import TrcFtcLib.ftclib.FtcBNO055Imu;
 import TrcFtcLib.ftclib.FtcColorSensor;
 import TrcFtcLib.ftclib.FtcDcMotor;
 import TrcFtcLib.ftclib.FtcDigitalInput;
 import TrcFtcLib.ftclib.FtcGamepad;
+import TrcFtcLib.ftclib.FtcImu;
 import TrcFtcLib.ftclib.FtcOpMode;
 import TrcFtcLib.ftclib.FtcServo;
 
@@ -53,7 +51,7 @@ public class FtcTestRevHub extends FtcOpMode
     private static final int NUM_DIGITAL_INPUTS = 8;
 
     private FtcGamepad gamepad;
-    private FtcBNO055Imu imu;
+    private TrcGyro gyro;
     private FtcColorSensor colorSensor;
     private final FtcDcMotor[] motors = new FtcDcMotor[NUM_MOTORS];
     private final FtcServo[] servos = new FtcServo[NUM_SERVOS];
@@ -67,7 +65,9 @@ public class FtcTestRevHub extends FtcOpMode
         gamepad = new FtcGamepad("GamePad", gamepad1, this::buttonEvent);
         gamepad.setYInverted(true);
 
-        imu = new FtcBNO055Imu("imu");
+        gyro = new FtcImu(
+            "imu", RevHubOrientationOnRobot.LogoFacingDirection.UP,
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
         colorSensor = new FtcColorSensor("colorSensor");
 
         for (int i = 0; i < motors.length; i++)
@@ -94,14 +94,14 @@ public class FtcTestRevHub extends FtcOpMode
     @Override
     public void startMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
     {
-        imu.gyro.resetZIntegrator();
-        imu.gyro.setEnabled(true);
+        gyro.resetZIntegrator();
+        gyro.setEnabled(true);
     }   //startMode
 
     @Override
     public void stopMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
     {
-        imu.gyro.setEnabled(false);
+        gyro.setEnabled(false);
     }   //stopMode
 
     @Override
@@ -113,26 +113,26 @@ public class FtcTestRevHub extends FtcOpMode
             // Test I2C IMU.
             //
             telemetry.addData("Heading", "Heading: x=%6.1f,y=%6.1f,z=%6.1f",
-                              imu.gyro.getXHeading().value, imu.gyro.getYHeading().value, imu.gyro.getZHeading().value);
+                              gyro.getXHeading().value, gyro.getYHeading().value, gyro.getZHeading().value);
             telemetry.addData("TurnRate", "TurnRate: x=%6.1f,y=%6.1f,z=%6.1f",
-                              imu.gyro.getXRotationRate().value, imu.gyro.getYRotationRate().value,
-                              imu.gyro.getZRotationRate().value);
-            telemetry.addData("ImuAngle", "Angle:x=%6.1f,y=%6.1f,z=%6.1f",
-                              imu.imu.getAngularOrientation(
-                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle,
-                              imu.imu.getAngularOrientation(
-                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle,
-                              imu.imu.getAngularOrientation(
-                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle);
-            telemetry.addData("Accel", "x=%6.1f,y=%6.1f,z=%6.1f",
-                              imu.accel.getXAcceleration().value, imu.accel.getYAcceleration().value,
-                              imu.accel.getZAcceleration().value);
-            telemetry.addData("Vel", "Vel: x=%6.1f,y=%6.1f,z=%6.1f",
-                              imu.accel.getXVelocity().value, imu.accel.getYVelocity().value,
-                              imu.accel.getZVelocity().value);
-            telemetry.addData("Dist", "x=%6.1f,y=%6.1f,z=%6.1f",
-                              imu.accel.getXDistance().value, imu.accel.getYDistance().value,
-                              imu.accel.getZDistance().value);
+                              gyro.getXRotationRate().value, gyro.getYRotationRate().value,
+                              gyro.getZRotationRate().value);
+//            telemetry.addData("ImuAngle", "Angle:x=%6.1f,y=%6.1f,z=%6.1f",
+//                              getAngularOrientation(
+//                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle,
+//                              getAngularOrientation(
+//                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle,
+//                              getAngularOrientation(
+//                                  AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle);
+//            telemetry.addData("Accel", "x=%6.1f,y=%6.1f,z=%6.1f",
+//                              imu.accel.getXAcceleration().value, imu.accel.getYAcceleration().value,
+//                              imu.accel.getZAcceleration().value);
+//            telemetry.addData("Vel", "Vel: x=%6.1f,y=%6.1f,z=%6.1f",
+//                              imu.accel.getXVelocity().value, imu.accel.getYVelocity().value,
+//                              imu.accel.getZVelocity().value);
+//            telemetry.addData("Dist", "x=%6.1f,y=%6.1f,z=%6.1f",
+//                              imu.accel.getXDistance().value, imu.accel.getYDistance().value,
+//                              imu.accel.getZDistance().value);
             //
             // Test I2C Color Sensor.
             //
