@@ -58,7 +58,7 @@ public class FtcTestSensorSampleTime extends FtcOpMode
     private double prevSample;
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         Log.i(TAG, "initRobot started...");
         lfWheel = new FtcDcMotor("lfWheel");
@@ -94,7 +94,7 @@ public class FtcTestSensorSampleTime extends FtcOpMode
         }
 
         Log.i(TAG, "initRobot completed!");
-    }   //initRobot
+    }   //robotInit
 
     @Override
     public void startMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
@@ -116,10 +116,10 @@ public class FtcTestSensorSampleTime extends FtcOpMode
     @Override
     public void stopMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
     {
-        lfWheel.set(0.0);
-        lbWheel.set(0.0);
-        rfWheel.set(0.0);
-        rbWheel.set(0.0);
+        lfWheel.setPower(0.0);
+        lbWheel.setPower(0.0);
+        rfWheel.setPower(0.0);
+        rbWheel.setPower(0.0);
 
         switch (sensorType)
         {
@@ -209,10 +209,10 @@ public class FtcTestSensorSampleTime extends FtcOpMode
                 //
                 // Driving forward and checking encoders.
                 //
-                lfWheel.set(DRIVE_POWER);
-                rfWheel.set(DRIVE_POWER);
-                lbWheel.set(DRIVE_POWER);
-                rbWheel.set(DRIVE_POWER);
+                lfWheel.setPower(DRIVE_POWER);
+                rfWheel.setPower(DRIVE_POWER);
+                lbWheel.setPower(DRIVE_POWER);
+                rbWheel.setPower(DRIVE_POWER);
                 Log.i(TAG, prefix + String.format("lf=%.0f, rf=%.0f, lb=%.0f, rb=%.0f",
                                                   lfWheel.getPosition(), rfWheel.getPosition(),
                                                   lbWheel.getPosition(), rbWheel.getPosition()));
@@ -224,10 +224,10 @@ public class FtcTestSensorSampleTime extends FtcOpMode
                 //
                 // Turning right and checking gyro.
                 //
-                lfWheel.set(TURN_POWER);
-                lbWheel.set(TURN_POWER);
-                rfWheel.set(-TURN_POWER);
-                rbWheel.set(-TURN_POWER);
+                lfWheel.setPower(TURN_POWER);
+                lbWheel.setPower(TURN_POWER);
+                rfWheel.setPower(-TURN_POWER);
+                rbWheel.setPower(-TURN_POWER);
                 Log.i(TAG, prefix);
                 break;
         }

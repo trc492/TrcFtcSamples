@@ -51,7 +51,7 @@ public class FtcTestMRRangeSensor extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -61,7 +61,7 @@ public class FtcTestMRRangeSensor extends FtcOpMode
 
         i2cRangeSensor = new FtcMRI2cRangeSensor("i2cRangeSensor");
         rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

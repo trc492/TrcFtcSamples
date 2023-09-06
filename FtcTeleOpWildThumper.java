@@ -89,7 +89,7 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -169,7 +169,7 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
         {
             driveBase = new TrcSimpleDriveBase(lfMotor, lbMotor, rfMotor, rbMotor);
         }
-    }   //initRobot
+    }   //robotInit
 
     /**
      * This method is called to start/stop the song. It takes care of keeping track of the song state and

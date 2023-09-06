@@ -34,7 +34,7 @@ public class FtcTeleOpMecanumBot extends DemoBotTeleOp
 {
     public FtcTeleOpMecanumBot()
     {
-        super(true, true);
+        super(true, true, false);
     }   //FtcTeleOpMecanumBot
 
 }   //class FtcTeleOpMecanumBot

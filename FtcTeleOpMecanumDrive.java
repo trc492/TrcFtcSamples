@@ -49,7 +49,7 @@ public class FtcTeleOpMecanumDrive extends FtcOpMode implements TrcGameControlle
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -72,7 +72,7 @@ public class FtcTeleOpMecanumDrive extends FtcOpMode implements TrcGameControlle
         rfWheel.setMotorInverted(true);
         rbWheel.setMotorInverted(true);
         driveBase = new TrcMecanumDriveBase(lfWheel, lbWheel, rfWheel, rbWheel, null);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

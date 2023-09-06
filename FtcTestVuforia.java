@@ -35,6 +35,7 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -43,7 +44,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 import TrcCommonLib.trclib.TrcRobot;
 import TrcCommonLib.trclib.TrcUtil;
@@ -81,7 +81,7 @@ public class FtcTestVuforia extends FtcOpMode
     private static final String WEBCAM_NAME = "Webcam 1";
     private static final int CAMERAVIEW_ID = opMode.hardwareMap.appContext.getResources().getIdentifier(
         "cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
-    private static final VuforiaLocalizer.CameraDirection CAMERA_DIR = VuforiaLocalizer.CameraDirection.BACK;
+    private static final OpenCvInternalCamera.CameraDirection CAMERA_DIR = OpenCvInternalCamera.CameraDirection.BACK;
     private static final String TRACKABLE_IMAGES_FILE = "RoverRuckus";
 
     private FtcDashboard dashboard;
@@ -96,7 +96,7 @@ public class FtcTestVuforia extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -138,8 +138,9 @@ public class FtcTestVuforia extends FtcOpMode
                 .translation(CAMERA_FORWARD_DISPLACEMENT,
                              CAMERA_LEFT_DISPLACEMENT,
                              CAMERA_VERTICAL_DISPLACEMENT)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
-                        CAMERA_DIR == FRONT ? 90 : -90, 0, 0));
+                .multiplied(Orientation.getRotationMatrix(
+                    EXTRINSIC, YZX, DEGREES,
+                    CAMERA_DIR == OpenCvInternalCamera.CameraDirection.FRONT ? 90 : -90, 0, 0));
         /*
          * In order for localization to work, we need to tell the system where each target is on the field, and
          * where the phone resides on the robot. These specifications are in the form of <em>transformation matrices.</em>
@@ -234,7 +235,7 @@ public class FtcTestVuforia extends FtcOpMode
             targetsFound = new boolean[imageTargets.length];
             Arrays.fill(targetsFound, false);
         }
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

@@ -45,10 +45,10 @@ public class FtcAutoK9LineFollow extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         robot = new K9Robot();
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

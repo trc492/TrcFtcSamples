@@ -45,7 +45,7 @@ public class FtcTeleOpK9TankDrive extends FtcOpMode implements TrcGameController
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         robot = new K9Robot();
         //
@@ -53,7 +53,7 @@ public class FtcTeleOpK9TankDrive extends FtcOpMode implements TrcGameController
         //
         gamepad = new FtcGamepad("Gamepad", gamepad1, this);
         gamepad.setYInverted(true);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

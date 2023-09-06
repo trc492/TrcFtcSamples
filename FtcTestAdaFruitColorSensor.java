@@ -48,7 +48,7 @@ public class FtcTestAdaFruitColorSensor extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -56,7 +56,7 @@ public class FtcTestAdaFruitColorSensor extends FtcOpMode
             ((FtcRobotControllerActivity)hardwareMap.appContext)
                 .findViewById(com.qualcomm.ftcrobotcontroller.R.id.textOpMode));
         sensor = new FtcI2cAdaFruitColorSensor("adaFruitColorSensor");
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

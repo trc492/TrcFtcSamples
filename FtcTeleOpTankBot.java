@@ -29,12 +29,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * This opmode demonstrates TeleOp Tank Drive on a West Coast Drive robot base.
  */
 @TeleOp(name="TeleOp: Tank Bot", group="TrcFtcSamples")
-@Disabled
+//@Disabled
 public class FtcTeleOpTankBot extends DemoBotTeleOp
 {
     public FtcTeleOpTankBot()
     {
-        super(false, false);
+        super(false, false, false);
     }   //FtcTeleOpTankBot
 
 }   //class FtcTeleOpTankBot

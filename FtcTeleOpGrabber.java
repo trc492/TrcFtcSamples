@@ -57,7 +57,7 @@ public class FtcTeleOpGrabber extends FtcOpMode implements TrcGameController.But
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         final TrcServoGrabber.Parameters grabberParams = new TrcServoGrabber.Parameters()
                 .setStepParams(GRABBER_MAX_STEPRATE, GRABBER_MIN_POS, GRABBER_MAX_POS)
@@ -75,7 +75,7 @@ public class FtcTeleOpGrabber extends FtcOpMode implements TrcGameController.But
         //
         gamepad = new FtcGamepad("Gamepad", gamepad1, this);
         gamepad.setYInverted(true);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

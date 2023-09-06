@@ -60,7 +60,7 @@ public class FtcTestRevHub extends FtcOpMode
     private boolean dpadRightPressed = false;
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         gamepad = new FtcGamepad("GamePad", gamepad1, this::buttonEvent);
         gamepad.setYInverted(true);
@@ -89,7 +89,7 @@ public class FtcTestRevHub extends FtcOpMode
         {
             digitalInputs[i] = new FtcDigitalInput("digital" + i);
         }
-    }   //initRobot
+    }   //robotInit
 
     @Override
     public void startMode(TrcRobot.RunMode prevMode, TrcRobot.RunMode nextMode)
@@ -151,7 +151,7 @@ public class FtcTestRevHub extends FtcOpMode
             double motorPower = gamepad.getRightStickY(true);
             for (int i = 0; i < motors.length; i++)
             {
-                motors[i].set(motorPower);
+                motors[i].setPower(motorPower);
                 telemetry.addData("Motor" + i, "power=%.1f, enc=%d", motorPower, motors[i].getPosition());
             }
             //

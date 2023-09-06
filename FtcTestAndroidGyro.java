@@ -48,7 +48,7 @@ public class FtcTestAndroidGyro extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -62,7 +62,7 @@ public class FtcTestAndroidGyro extends FtcOpMode
         gyro.setXScale(scale);
         gyro.setYScale(scale);
         gyro.setZScale(scale);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

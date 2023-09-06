@@ -51,7 +51,7 @@ public class FtcTestAndroidAccel extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -78,7 +78,7 @@ public class FtcTestAndroidAccel extends FtcOpMode
         accel.setYScale(39.3701);
         accel.setZScale(39.3701);
         accel.setSamplingPeriod(SensorManager.SENSOR_DELAY_FASTEST);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

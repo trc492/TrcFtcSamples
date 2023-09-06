@@ -58,7 +58,7 @@ public class FtcAutoK9PidSeekIr extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         robot = new K9Robot();
         //
@@ -66,7 +66,7 @@ public class FtcAutoK9PidSeekIr extends FtcOpMode
         //
         event = new TrcEvent("seekIrEvent");
         sm = new TrcStateMachine<>("seekIrSM");
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

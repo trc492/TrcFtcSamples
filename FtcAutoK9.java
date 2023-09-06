@@ -84,7 +84,7 @@ public class FtcAutoK9 extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         //
         // Create the robot.
@@ -126,7 +126,7 @@ public class FtcAutoK9 extends FtcOpMode
                 autoCommand = null;
                 break;
         }
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

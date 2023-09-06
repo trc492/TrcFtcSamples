@@ -28,7 +28,6 @@ import TrcCommonLib.trclib.TrcDriveBase;
 import TrcCommonLib.trclib.TrcGameController;
 import TrcCommonLib.trclib.TrcGyro;
 import TrcCommonLib.trclib.TrcMecanumDriveBase;
-import TrcCommonLib.trclib.TrcPidActuator;
 import TrcCommonLib.trclib.TrcRobot;
 import TrcCommonLib.trclib.TrcSimpleDriveBase;
 import TrcFtcLib.ftclib.FtcDashboard;
@@ -37,6 +36,7 @@ import TrcFtcLib.ftclib.FtcDigitalInput;
 import TrcFtcLib.ftclib.FtcGamepad;
 import TrcFtcLib.ftclib.FtcImu;
 import TrcFtcLib.ftclib.FtcOpMode;
+import TrcFtcLib.ftclib.FtcServo;
 
 /**
  * This class implements two demo bots: a mecanum bot and a tank bot.
@@ -54,6 +54,7 @@ public class DemoBotTeleOp extends FtcOpMode
     private static final String HWNAME_ELEVATOR_MOTOR           = "elevatorMotor";
     private static final String HWNAME_ELEVATOR_LOWER_LIMIT     = "elevatorLowerLimit";
     private static final String HWNAME_ELEVATOR_UPPER_LIMIT     = "elevatorUpperLimit";
+    private static final String HWNAME_SHOOTER_GATE             = "shooterGate";
     //
     // Drive Base constants.
     //
@@ -64,13 +65,14 @@ public class DemoBotTeleOp extends FtcOpMode
     //
     private static final double ELEVATOR_INCHES_PER_COUNT       = 5.625/8498;
     private static final double ELEVATOR_ZERO_OFFSET            = 16.25;
-    private static final double ELEVATOR_KP                     = 3.0;
-    private static final double ELEVATOR_KI                     = 0.0;
-    private static final double ELEVATOR_KD                     = 0.0;
-    private static final double ELEVATOR_TOLERANCE              = 0.2;
     private static final double ELEVATOR_MIN_HEIGHT             = ELEVATOR_ZERO_OFFSET - 0.1;
     private static final double ELEVATOR_MAX_HEIGHT             = 23.0;
     private static final double ELEVATOR_CAL_POWER              = -0.3;
+    //
+    // Shooter Gate.
+    //
+    private static final double SHOOTER_GATE_OPEN_POS           = 1.0;
+    private static final double SHOOTER_GATE_CLOSE_POS          = 0.0;
     //
     // TeleOp constants.
     //
@@ -81,6 +83,7 @@ public class DemoBotTeleOp extends FtcOpMode
     //
     private final boolean isMecanumBot;
     private final boolean hasElevator;
+    private final boolean hasShooterGate;
     private FtcDashboard dashboard;
     //
     // Sensors.
@@ -93,20 +96,24 @@ public class DemoBotTeleOp extends FtcOpMode
     //
     // Elevator.
     //
-    private FtcDigitalInput upperLimitSwitch;
-    private FtcDigitalInput lowerLimitSwitch;
-    private TrcPidActuator pidElevator;
+    private FtcDcMotor elevator;
+    //
+    // Shooter gate.
+    //
+    private FtcServo shooterGate;
     //
     // TeleOp.
     //
     private FtcGamepad gamepad;
     private double drivePowerScale = FAST_DRIVE_SCALE;
     private boolean manualOverride = false;
+    private boolean fieldMode = false;
 
-    public DemoBotTeleOp(boolean isMecanumBot, boolean hasElevator)
+    public DemoBotTeleOp(boolean isMecanumBot, boolean hasElevator, boolean hasShooterGate)
     {
         this.isMecanumBot = isMecanumBot;
         this.hasElevator = hasElevator;
+        this.hasShooterGate = hasShooterGate;
     }   //DemoBotTeleOp
 
     //
@@ -118,7 +125,7 @@ public class DemoBotTeleOp extends FtcOpMode
      * Station phone is pressed.
      */
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         //
         // Initialize global objects.
@@ -157,25 +164,24 @@ public class DemoBotTeleOp extends FtcOpMode
 
         if (hasElevator)
         {
-            FtcDcMotor elevatorMotor = new FtcDcMotor(HWNAME_ELEVATOR_MOTOR, lowerLimitSwitch, upperLimitSwitch, 0.0);
-            lowerLimitSwitch = new FtcDigitalInput(HWNAME_ELEVATOR_LOWER_LIMIT);
-            upperLimitSwitch = new FtcDigitalInput(HWNAME_ELEVATOR_UPPER_LIMIT);
+            FtcDigitalInput lowerLimitSwitch = new FtcDigitalInput(HWNAME_ELEVATOR_LOWER_LIMIT);
+            FtcDigitalInput upperLimitSwitch = new FtcDigitalInput(HWNAME_ELEVATOR_UPPER_LIMIT);
             lowerLimitSwitch.setInverted(true);
             upperLimitSwitch.setInverted(true);
-            TrcPidActuator.Parameters elevatorParams = new TrcPidActuator.Parameters()
-                .setPidParams(ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_TOLERANCE)
-                .setScaleAndOffset(ELEVATOR_INCHES_PER_COUNT, ELEVATOR_ZERO_OFFSET)
-                .setPosRange(ELEVATOR_MIN_HEIGHT, ELEVATOR_MAX_HEIGHT)
-                .setZeroCalibratePower(ELEVATOR_CAL_POWER);
-            pidElevator = new TrcPidActuator(
-                "pidElevator", elevatorMotor, lowerLimitSwitch, upperLimitSwitch, elevatorParams);
+            elevator = new FtcDcMotor(HWNAME_ELEVATOR_MOTOR, lowerLimitSwitch, upperLimitSwitch, null);
+            elevator.setPositionSensorScaleAndOffset(ELEVATOR_INCHES_PER_COUNT, ELEVATOR_ZERO_OFFSET);
+        }
+
+        if (hasShooterGate)
+        {
+            shooterGate = new FtcServo(HWNAME_SHOOTER_GATE);
         }
         //
         // Initializing gamepads.
         //
         gamepad = new FtcGamepad("Gamepad", gamepad1, this::buttonEvent);
         gamepad.setYInverted(true);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Implements TrcRobot.RobotMode interface.
@@ -234,7 +240,7 @@ public class DemoBotTeleOp extends FtcOpMode
                 double yPower = gamepad.getLeftStickY(true) * drivePowerScale;
                 double rotPower = gamepad.getRightStickX(true) * drivePowerScale;
 
-                driveBase.holonomicDrive(xPower, yPower, rotPower);
+                driveBase.holonomicDrive(null, xPower, yPower, rotPower, fieldMode? gyro.getZHeading().value: 0.0);
                 dashboard.displayPrintf(1, "Mecanum: x=%.2f, y=%.2f, rot=%.2f", xPower, yPower, rotPower);
             }
             else
@@ -245,25 +251,26 @@ public class DemoBotTeleOp extends FtcOpMode
                 driveBase.tankDrive(leftPower, rightPower);
                 dashboard.displayPrintf(1, "WestCoast: left=%.2f, right=%.2f", leftPower, rightPower);
             }
+            dashboard.displayPrintf(2, "%s: heading=%.3f", fieldMode? "Field": "Robot", gyro.getZHeading().value);
             //
             // Elevator subsystem.
             //
-            if (pidElevator != null)
+            if (elevator != null)
             {
                 double elevatorPower = gamepad.getRightTrigger(true) - gamepad.getLeftTrigger(true);
 
                 if (manualOverride)
                 {
-                    pidElevator.setPower(elevatorPower);
+                    elevator.setPower(elevatorPower);
                 }
                 else
                 {
-                    pidElevator.setPidPower(elevatorPower);
+                    elevator.setPidPower(elevatorPower, ELEVATOR_MIN_HEIGHT, ELEVATOR_MAX_HEIGHT, true);
                 }
                 dashboard.displayPrintf(
-                    2, "Elevator: power=%.2f, pos=%.2f, limitSw(lower/upper)=%s/%s",
-                    elevatorPower, pidElevator.getPosition(),
-                    pidElevator.isLowerLimitSwitchActive(), pidElevator.isUpperLimitSwitchActive());
+                    3, "Elevator: power=%.2f, pos=%.2f, limitSw(lower/upper)=%s/%s",
+                    elevatorPower, elevator.getPosition(),
+                    elevator.isLowerLimitSwitchActive(), elevator.isUpperLimitSwitchActive());
             }
         }
     }   //periodic
@@ -281,6 +288,31 @@ public class DemoBotTeleOp extends FtcOpMode
         {
             switch (button)
             {
+                case FtcGamepad.GAMEPAD_A:
+                    if (driveBase instanceof TrcMecanumDriveBase && pressed)
+                    {
+                        fieldMode = !fieldMode;
+                        if (fieldMode)
+                        {
+                            gyro.resetZIntegrator();
+                        }
+                    }
+                    break;
+
+                case FtcGamepad.GAMEPAD_B:
+                    if (shooterGate != null)
+                    {
+                        if (pressed)
+                        {
+                            shooterGate.setPosition(SHOOTER_GATE_OPEN_POS);
+                        }
+                        else
+                        {
+                            shooterGate.setPosition(SHOOTER_GATE_CLOSE_POS);
+                        }
+                    }
+                    break;
+
                 case FtcGamepad.GAMEPAD_LBUMPER:
                     drivePowerScale = pressed? SLOW_DRIVE_SCALE: FAST_DRIVE_SCALE;
                     break;
@@ -290,9 +322,9 @@ public class DemoBotTeleOp extends FtcOpMode
                     break;
 
                 case FtcGamepad.GAMEPAD_BACK:
-                    if (pidElevator != null && pressed)
+                    if (elevator != null && pressed)
                     {
-                        pidElevator.zeroCalibrate();
+                        elevator.zeroCalibrate(ELEVATOR_CAL_POWER);
                     }
                     break;
             }

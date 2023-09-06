@@ -26,12 +26,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import TrcCommonLib.trclib.TrcGameController;
-import TrcCommonLib.trclib.TrcPidActuator;
-import TrcCommonLib.trclib.TrcPidController;
 import TrcCommonLib.trclib.TrcRobot;
 import TrcFtcLib.ftclib.FtcDashboard;
+import TrcFtcLib.ftclib.FtcDcMotor;
+import TrcFtcLib.ftclib.FtcDigitalInput;
 import TrcFtcLib.ftclib.FtcGamepad;
-import TrcFtcLib.ftclib.FtcMotorActuator;
 import TrcFtcLib.ftclib.FtcOpMode;
 
 /**
@@ -46,10 +45,6 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
     //
     // Elevator constants.
     //
-    private static final double ELEVATOR_KP                     = 0.5;
-    private static final double ELEVATOR_KI                     = 0.0;
-    private static final double ELEVATOR_KD                     = 0.0;
-    private static final double ELEVATOR_TOLERANCE              = 0.2;
     private static final double ELEVATOR_MIN_HEIGHT             = 0.0;
     private static final double ELEVATOR_MAX_HEIGHT             = 23.5;
     private static final double ELEVATOR_INCHES_PER_COUNT       = (23.5/9700.0);
@@ -60,9 +55,7 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
     private static final double ELEVATOR_STALL_TIMEOUT          = 0.5;
     private static final double ELEVATOR_RESET_TIMEOUT          = 0.5;
     private static final boolean ELEVATOR_INVERTED              = false;
-    private static final boolean ELEVATOR_HAS_LOWER_LIMIT_SWITCH= true;
     private static final boolean ELEVATOR_LOWER_LIMIT_SWITCH_INVERTED = false;
-    private static final boolean ELEVATOR_HAS_UPPER_LIMIT_SWITCH= true;
     private static final boolean ELEVATOR_UPPER_LIMIT_SWITCH_INVERTED = false;
 
     private FtcDashboard dashboard;
@@ -73,7 +66,7 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
     //
     // Elevator.
     //
-    private TrcPidActuator elevator;
+    private FtcDcMotor elevator;
     private boolean elevatorManualOverride = false;
 
     //
@@ -81,21 +74,8 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
-        final FtcMotorActuator.MotorParams motorParams = new FtcMotorActuator.MotorParams(
-            ELEVATOR_INVERTED,
-            ELEVATOR_HAS_LOWER_LIMIT_SWITCH, ELEVATOR_LOWER_LIMIT_SWITCH_INVERTED,
-            ELEVATOR_HAS_UPPER_LIMIT_SWITCH, ELEVATOR_UPPER_LIMIT_SWITCH_INVERTED);
-        final TrcPidActuator.Parameters elevatorParams = new TrcPidActuator.Parameters()
-                .setPosRange(ELEVATOR_MIN_HEIGHT, ELEVATOR_MAX_HEIGHT)
-                .setScaleAndOffset(ELEVATOR_INCHES_PER_COUNT, ELEVATOR_OFFSET)
-                .setPidParams(new TrcPidController.PidParameters(
-                    ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_TOLERANCE, this::getElevatorPosition))
-                .setZeroCalibratePower(ELEVATOR_CAL_POWER)
-                .setStallProtectionParams(
-                    ELEVATOR_STALL_MIN_POWER, ELEVATOR_STALL_TOLERANCE, ELEVATOR_STALL_TIMEOUT, ELEVATOR_RESET_TIMEOUT);
-
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
         //
@@ -106,9 +86,17 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
         //
         // Elevator subsystem.
         //
-        elevator = new FtcMotorActuator("elevator", motorParams, elevatorParams).getPidActuator();
-        elevator.zeroCalibrate();
-    }   //initRobot
+        FtcDigitalInput lowerLimitSwitch = new FtcDigitalInput("lowerLimitSw");
+        FtcDigitalInput upperLimitSwitch = new FtcDigitalInput("upperLimitSw");
+        lowerLimitSwitch.setInverted(ELEVATOR_LOWER_LIMIT_SWITCH_INVERTED);
+        upperLimitSwitch.setInverted(ELEVATOR_UPPER_LIMIT_SWITCH_INVERTED);
+        elevator = new FtcDcMotor("elevator", lowerLimitSwitch, upperLimitSwitch, null);
+        elevator.setMotorInverted(ELEVATOR_INVERTED);
+        elevator.setPositionSensorScaleAndOffset(ELEVATOR_INCHES_PER_COUNT, ELEVATOR_OFFSET);
+        elevator.setStallProtection(
+            ELEVATOR_STALL_MIN_POWER, ELEVATOR_STALL_TOLERANCE, ELEVATOR_STALL_TIMEOUT, ELEVATOR_RESET_TIMEOUT);
+        elevator.zeroCalibrate(ELEVATOR_CAL_POWER);
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.
@@ -135,7 +123,7 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
             }
             else
             {
-                elevator.setPidPower(elevatorPower);
+                elevator.setPidPower(elevatorPower, ELEVATOR_MIN_HEIGHT, ELEVATOR_MAX_HEIGHT, true);
             }
             dashboard.displayPrintf(
                 1, "Elevator:power=%.2f,height=%.2f,lowerLimit=%s,upperLimit=%s",
@@ -165,7 +153,7 @@ public class FtcTeleOpPidElevator extends FtcOpMode implements TrcGameController
                     // Press this button to start zero calibration.
                     if (pressed)
                     {
-                        elevator.zeroCalibrate();
+                        elevator.zeroCalibrate(ELEVATOR_CAL_POWER);
                     }
                     break;
             }

@@ -49,14 +49,14 @@ public class FtcTestRevColorSensor extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         //
         // Initializing sensors on or connected to the REV hub.
         //
         dashboard = FtcDashboard.getInstance();
         colorSensor = hardwareMap.get(ColorSensor.class, "colorRangeSensor");
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

@@ -61,7 +61,7 @@ public class FtcTestAndroidSensors extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -97,7 +97,7 @@ public class FtcTestAndroidSensors extends FtcOpMode
 //        orientation = FtcAndroidSensor.createInstance("orientation", Sensor.TYPE_ORIENTATION, 3);
         proximity = FtcAndroidSensor.createInstance("proximity", Sensor.TYPE_PROXIMITY, 1);
         light = FtcAndroidSensor.createInstance("light", Sensor.TYPE_LIGHT, 1);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

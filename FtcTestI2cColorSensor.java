@@ -52,7 +52,7 @@ public class FtcTestI2cColorSensor extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -64,7 +64,7 @@ public class FtcTestI2cColorSensor extends FtcOpMode
         i2cColorSensor = new FtcMRI2cColorSensor("i2cColorSensor", ALTERNATE_I2CADDRESS, false);
 //        i2cColorSensor.setLEDEnabled(false);
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

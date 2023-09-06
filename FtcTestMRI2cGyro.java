@@ -48,7 +48,7 @@ public class FtcTestMRI2cGyro extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
 
     {
         hardwareMap.logDevices();
@@ -58,7 +58,7 @@ public class FtcTestMRI2cGyro extends FtcOpMode
                 .findViewById(com.qualcomm.ftcrobotcontroller.R.id.textOpMode));
         gyro = new FtcMRI2cGyro("mrGyro");
         gyro.calibrate();
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

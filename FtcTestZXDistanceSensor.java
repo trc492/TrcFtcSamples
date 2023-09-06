@@ -48,7 +48,7 @@ public class FtcTestZXDistanceSensor extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -56,7 +56,7 @@ public class FtcTestZXDistanceSensor extends FtcOpMode
             ((FtcRobotControllerActivity)hardwareMap.appContext)
                 .findViewById(com.qualcomm.ftcrobotcontroller.R.id.textOpMode));
         sensor = new FtcZXDistanceSensor("zxSensor", FtcZXDistanceSensor.ALTERNATE_I2CADDRESS, false);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

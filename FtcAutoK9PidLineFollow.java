@@ -60,7 +60,7 @@ public class FtcAutoK9PidLineFollow extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         robot = new K9Robot();
         //
@@ -68,7 +68,7 @@ public class FtcAutoK9PidLineFollow extends FtcOpMode
         //
         event = new TrcEvent("driveEvent");
         sm = new TrcStateMachine<>("lineFollow");
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

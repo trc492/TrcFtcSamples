@@ -138,7 +138,7 @@ public class FtcTestSong extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
         hardwareMap.logDevices();
         dashboard = FtcDashboard.getInstance();
@@ -149,7 +149,7 @@ public class FtcTestSong extends FtcOpMode
         songPlayer = new TrcSongPlayer("SongPlayer", androidTone);
         sm = new TrcStateMachine<>("SongPlayer");
         event = new TrcEvent("SongCompletion");
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.

@@ -60,7 +60,7 @@ public class FtcTeleOpVariableSpeedServo extends FtcOpMode
     //
 
     @Override
-    public void initRobot()
+    public void robotInit()
     {
 
         hardwareMap.logDevices();
@@ -76,7 +76,7 @@ public class FtcTeleOpVariableSpeedServo extends FtcOpMode
         arm = new FtcServo("arm");
         arm.setStepMode(ARM_MAX_STEPRATE, ARM_MIN_POS, ARM_MAX_POS);
         arm.setPosition(ARM_MIN_POS);
-    }   //initRobot
+    }   //robotInit
 
     //
     // Overrides TrcRobot.RobotMode methods.
