@@ -203,13 +203,13 @@ public class K9Robot
         // Arm subsystem.
         //
         arm = new FtcServo("servo_1");
-        arm.setLogicalRange(ARM_RANGE_MIN, ARM_RANGE_MAX);
+        arm.setLogicalPosRange(ARM_RANGE_MIN, ARM_RANGE_MAX);
         arm.setPosition(ARM_RANGE_MIN);
         //
         // Claw subsystem.
         //
         claw = new FtcServo("servo_6");
-        claw.setLogicalRange(CLAW_RANGE_MIN, CLAW_RANGE_MAX);
+        claw.setLogicalPosRange(CLAW_RANGE_MIN, CLAW_RANGE_MAX);
         claw.setPosition(CLAW_RANGE_MIN);
     }   //K9Robot
 

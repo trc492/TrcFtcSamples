@@ -74,7 +74,7 @@ public class FtcTeleOpVariableSpeedServo extends FtcOpMode
         // Arm subsystem.
         //
         arm = new FtcServo("arm");
-        arm.setStepMode(ARM_MAX_STEPRATE, ARM_MIN_POS, ARM_MAX_POS);
+        arm.setStepModeParams(ARM_MAX_STEPRATE, ARM_MIN_POS, ARM_MAX_POS);
         arm.setPosition(ARM_MIN_POS);
     }   //robotInit
 
