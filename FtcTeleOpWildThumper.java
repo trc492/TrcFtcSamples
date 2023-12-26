@@ -29,7 +29,6 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 
 import java.io.InputStream;
 
-import TrcCommonLib.trclib.TrcBooleanState;
 import TrcCommonLib.trclib.TrcGameController;
 import TrcCommonLib.trclib.TrcRobot;
 import TrcCommonLib.trclib.TrcSimpleDriveBase;
@@ -78,7 +77,7 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
     private TrcSong[] collection = null;
     private int songIndex = -1;
     private TrcSongPlayer songPlayer = null;
-    private final TrcBooleanState envelopeToggle = new TrcBooleanState("EnvelopeToggle", true);
+    private boolean envelopeEnabled = true;
     //
     // Drive Base.
     //
@@ -109,7 +108,7 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
         //
         androidTone = new FtcAndroidTone("AndroidTone");
         androidTone.setSoundEnvelope(ATTACK, DECAY, SUSTAIN, RELEASE);
-        androidTone.setSoundEnvelopeEnabled(envelopeToggle.getState());
+        androidTone.setSoundEnvelopeEnabled(envelopeEnabled);
         int songResourceId = hardwareMap.appContext.getResources().getIdentifier(
             "songcollection", "raw", hardwareMap.appContext.getPackageName());
         InputStream songStream = activity.getResources().openRawResource(songResourceId);
@@ -237,7 +236,7 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
 
             dashboard.displayPrintf(1, "Power(L/R) = %.2f/%.2f", left, right);
             dashboard.displayPrintf(2, "GyroHeading = %.2f", gyro.getZHeading().value);
-            dashboard.displayPrintf(3, "SoundEnvelope = %s", envelopeToggle.getState() ? "ON" : "OFF");
+            dashboard.displayPrintf(3, "SoundEnvelope = %s", envelopeEnabled ? "ON" : "OFF");
         }
     }   //periodic
 
@@ -261,7 +260,8 @@ public class FtcTeleOpWildThumper extends FtcOpMode implements TrcGameController
                     //
                     if (pressed)
                     {
-                        androidTone.setSoundEnvelopeEnabled(envelopeToggle.toggleState());
+                        envelopeEnabled = !envelopeEnabled;
+                        androidTone.setSoundEnvelopeEnabled(envelopeEnabled);
                     }
                     break;
 
