@@ -156,26 +156,16 @@ public class K9Robot
         //
         // PID drives.
         //
-
-        TrcPidController.PidParameters yEncPidParams = new TrcPidController.PidParameters(
-            yEncPidCoeff, 1.0, driveBase::getYPosition);
-        TrcPidController.PidParameters gyroPidParams = new TrcPidController.PidParameters(
-            gyroPidCoeff, 1.0, driveBase::getHeading);
-        TrcPidController.PidParameters colorPidParams = new TrcPidController.PidParameters(
-            colorPidCoeff, 2.0, this::getColorValue);
-        TrcPidController.PidParameters lightPidParams = new TrcPidController.PidParameters(
-            lightPidCoeff, 5.0, lightSensor.sensor::getRawLightDetected);
-        TrcPidController.PidParameters irDrivePidParams = new TrcPidController.PidParameters(
-            irDrivePidCoeff, 0.1, this::getIrStrength);
-        TrcPidController.PidParameters irTurnPidParams = new TrcPidController.PidParameters(
-            irTurnPidCoeff, 1.0, this::getIrAngle);
-
-        pidDrive = new TrcPidDrive("pidDrive", driveBase, null, yEncPidParams, gyroPidParams);
+        pidDrive = new TrcPidDrive(
+            "pidDrive", driveBase,
+            yEncPidCoeff, 1.0, driveBase::getYPosition, gyroPidCoeff, 1.0, driveBase::getHeading);
         pidDrive.getTurnPidCtrl().setAbsoluteSetPoint(true);
         //
         // PID line follow using color sensor.
         //
-        colorPidLineFollow = new TrcPidDrive("colorPidLineFollow", driveBase, null, yEncPidParams, colorPidParams);
+        colorPidLineFollow = new TrcPidDrive(
+            "colorPidLineFollow", driveBase,
+            yEncPidCoeff, 1.0, driveBase::getYPosition, colorPidCoeff, 2.0, this::getColorValue);
         colorPidLineFollow.getTurnPidCtrl().setAbsoluteSetPoint(true);
         // In order to line follow, we need to first find the line. We will first use pidDrive to keep the robot
         // moving forward for a set distance. Then colorTrigger will interrupt pidDrive once the line is detected.
@@ -185,7 +175,9 @@ public class K9Robot
         //
         // PID line follow using Optical Distance sensor.
         //
-        lightPidLineFollow = new TrcPidDrive("lightPidLineFollow", driveBase, null, yEncPidParams, lightPidParams);
+        lightPidLineFollow = new TrcPidDrive(
+            "lightPidLineFollow", driveBase,
+            yEncPidCoeff, 1.0, driveBase::getYPosition, lightPidCoeff, 5.0, lightSensor.sensor::getRawLightDetected);
         lightPidLineFollow.getTurnPidCtrl().setAbsoluteSetPoint(true);
         // In order to line follow, we need to first find the line. We will first use pidDrive to keep the robot
         // moving forward for a set distance. Then lightTrigger will interrupt pidDrive once the line is detected.
@@ -196,7 +188,9 @@ public class K9Robot
         //
         // PID IR seeking.
         //
-        irPidDrive = new TrcPidDrive("irPidDrive", driveBase, null, irDrivePidParams, irTurnPidParams);
+        irPidDrive = new TrcPidDrive(
+            "irPidDrive", driveBase,
+            irDrivePidCoeff, 0.1, this::getIrStrength, irTurnPidCoeff, 1.0, this::getIrAngle);
         irPidDrive.getYPidCtrl().setAbsoluteSetPoint(true);
         irPidDrive.getTurnPidCtrl().setAbsoluteSetPoint(true);
         //
