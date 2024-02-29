@@ -30,6 +30,7 @@ import TrcCommonLib.trclib.TrcGyro;
 import TrcCommonLib.trclib.TrcPidController;
 import TrcCommonLib.trclib.TrcPidDrive;
 import TrcCommonLib.trclib.TrcSimpleDriveBase;
+import TrcCommonLib.trclib.TrcTrigger;
 import TrcCommonLib.trclib.TrcTriggerThresholdZones;
 import TrcFtcLib.ftclib.FtcDashboard;
 import TrcFtcLib.ftclib.FtcDcMotor;
@@ -238,7 +239,7 @@ public class K9Robot
     {
         if (enabled)
         {
-            colorTrigger.enableTrigger(this::colorTriggerEvent);
+            colorTrigger.enableTrigger(TrcTrigger.TriggerMode.OnBoth, this::colorTriggerEvent);
         }
         else
         {
@@ -255,7 +256,7 @@ public class K9Robot
     {
         if (enabled)
         {
-            lightTrigger.enableTrigger(this::lightTriggerEvent);
+            lightTrigger.enableTrigger(TrcTrigger.TriggerMode.OnBoth, this::lightTriggerEvent);
         }
         else
         {
